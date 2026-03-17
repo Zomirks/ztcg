@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('release_date')->nullable();
             $table->string('product_type');
             $table->string('language');
-            $table->foreignId('tcg_id')->constrained()->cascadeOnDelete();
             $table->foreignId('set_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
