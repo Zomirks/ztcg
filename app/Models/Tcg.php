@@ -10,7 +10,7 @@ class Tcg extends Model
 {
     protected $fillable = [
         'name',
-        'logo',
+        'logo_path',
         'description',
     ];
 
