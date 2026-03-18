@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('quantity')->default(1);
             $table->text('notes')->nullable();
-            $table->decimal('price_paid', 8, 2);
+            $table->decimal('purchase_price', 8, 2);
             $table->date('purchase_date')->nullable();
             $table->string('product_condition');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();

@@ -12,7 +12,7 @@ class CollectionItem extends Model
         'quantity',
         'user_id',
         'product_id',
-        'price_paid',
+        'purchase_price',
         'notes',
         'purchase_date',
         'product_condition',
