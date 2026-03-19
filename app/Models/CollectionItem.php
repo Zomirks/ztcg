@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\ProductCondition;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CollectionItem extends Model
 {
+	use HasFactory;
+	
     protected $fillable = [
         'quantity',
         'user_id',
