@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Tcg extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'name',

@@ -19,9 +19,9 @@ class SetFactory extends Factory
     {
         return [
             'name' => fake()->words(3, true),
-			'code' => fake()->unique()->bothify('??-##'),
-			'release_date' => fake()->date(),
-			'tcg_id' => Tcg::factory()
+            'code' => fake()->unique()->bothify('??-##'),
+            'release_date' => fake()->date(),
+            'tcg_id' => Tcg::factory(),
         ];
     }
 }

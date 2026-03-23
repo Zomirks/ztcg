@@ -19,8 +19,8 @@ class TcgFactory extends Factory
     {
         return [
             'name' => fake()->randomElement(['Pokémon', 'One Piece']),
-			'logo_path' => fake()->imageUrl(),
-			'description' => fake()->sentence()
+            'logo_path' => fake()->imageUrl(),
+            'description' => fake()->sentence(),
         ];
     }
 }

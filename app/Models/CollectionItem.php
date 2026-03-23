@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CollectionItem extends Model
 {
-	use HasFactory;
-	
+    use HasFactory;
+
     protected $fillable = [
         'quantity',
         'user_id',

@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Enums\ProductType;
 use App\Enums\Language;
+use App\Enums\ProductType;
+use App\Models\Product;
 use App\Models\Set;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Product>
@@ -22,11 +22,11 @@ class ProductFactory extends Factory
     {
         return [
             'name' => fake()->words(4, true),
-			'base_price' => fake()->randomFloat(2, 15, 250),
-			'product_type' => fake()->randomElement(ProductType::cases()),
-			'language' => fake()->randomElement(Language::cases()),
-			'release_date' => fake()->date(),
-			'set_id' => Set::factory()
+            'base_price' => fake()->randomFloat(2, 15, 250),
+            'product_type' => fake()->randomElement(ProductType::cases()),
+            'language' => fake()->randomElement(Language::cases()),
+            'release_date' => fake()->date(),
+            'set_id' => Set::factory(),
         ];
     }
 }
