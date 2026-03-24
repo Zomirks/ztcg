@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCollectionItemRequest;
+use App\Http\Requests\UpdateCollectionItemRequest;
 use App\Models\CollectionItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CollectionItemController extends Controller
 {
@@ -15,9 +19,13 @@ class CollectionItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $items = $request->user()->collectionItems()->with('product.set.tcg')->latest()->get();
+
+        return Inertia::render('CollectionItems/Index', [
+            'items' => $items,
+        ]);
     }
 
     /**
@@ -25,15 +33,23 @@ class CollectionItemController extends Controller
      */
     public function create()
     {
-        //
+        $products = Product::with('set.tcg')->get();
+
+        return Inertia::render('CollectionItems/Create', [
+            'products' => $products,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCollectionItemRequest $request)
     {
-        //
+        $request->user()->collectionItems()->create($request->validated());
+
+        return redirect()
+            ->route('collection-items.index')
+            ->with('success', 'Produit ajouté à votre collection !');
     }
 
     /**
@@ -41,15 +57,25 @@ class CollectionItemController extends Controller
      */
     public function edit(CollectionItem $collectionItem)
     {
-        //
+        $collectionItem->load('product.set.tcg');
+        $products = Product::with('set.tcg')->get();
+
+        return Inertia::render('CollectionItems/Edit', [
+            'products' => $products,
+            'collection_item' => $collectionItem,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CollectionItem $collectionItem)
+    public function update(UpdateCollectionItemRequest $request, CollectionItem $collectionItem)
     {
-        //
+        $collectionItem->update($request->validated());
+
+        return redirect()
+            ->route('collection-items.index')
+            ->with('success', 'Produit modifié de votre collection !');
     }
 
     /**
@@ -57,6 +83,10 @@ class CollectionItemController extends Controller
      */
     public function destroy(CollectionItem $collectionItem)
     {
-        //
+        $collectionItem->delete();
+
+        return redirect()
+            ->route('collection-items.index')
+            ->with('success', 'Produit supprimé de votre collection !');
     }
 }
