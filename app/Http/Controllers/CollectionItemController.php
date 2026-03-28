@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProductCondition;
 use App\Http\Requests\StoreCollectionItemRequest;
 use App\Http\Requests\UpdateCollectionItemRequest;
 use App\Models\CollectionItem;
 use App\Models\Product;
+use App\Models\Tcg;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +15,7 @@ class CollectionItemController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(CollectionItem::class, 'collectionItem');
+        $this->authorize('viewAny', CollectionItem::class);
     }
 
     /**
@@ -23,8 +25,12 @@ class CollectionItemController extends Controller
     {
         $items = $request->user()->collectionItems()->with('product.set.tcg')->latest()->get();
 
-        return Inertia::render('CollectionItems/Index', [
+        return Inertia::render('collection-items/index', [
             'items' => $items,
+            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ]),
         ]);
     }
 
@@ -35,8 +41,13 @@ class CollectionItemController extends Controller
     {
         $products = Product::with('set.tcg')->get();
 
-        return Inertia::render('CollectionItems/Create', [
+        return Inertia::render('collection-items/create', [
             'products' => $products,
+            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ]),
+            'tcgs' => Tcg::all(),
         ]);
     }
 
@@ -60,9 +71,14 @@ class CollectionItemController extends Controller
         $collectionItem->load('product.set.tcg');
         $products = Product::with('set.tcg')->get();
 
-        return Inertia::render('CollectionItems/Edit', [
+        return Inertia::render('collection-items/edit', [
             'products' => $products,
             'collection_item' => $collectionItem,
+            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ]),
+            'tcgs' => Tcg::all(),
         ]);
     }
 
