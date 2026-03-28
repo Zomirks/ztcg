@@ -23,7 +23,11 @@ class CollectionItemController extends Controller
      */
     public function index(Request $request)
     {
-        $items = $request->user()->collectionItems()->with('product.set.tcg')->latest()->get();
+        $items = $request->user()
+			->collectionItems()
+			->with('product.set.tcg')
+			->latest()
+			->get();
 
         return Inertia::render('collection-items/index', [
             'items' => $items,
