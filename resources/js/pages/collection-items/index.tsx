@@ -1,19 +1,7 @@
-// REACT
-import { useState } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { CheckCircle2, CirclePlus, MoreHorizontalIcon, PackageOpen, X } from 'lucide-react';
+import { useState } from 'react';
 
-// TYPES
-import type { BreadcrumbItem } from '@/types';
-import type { CollectionItem, ProductConditionEnum } from '@/types/models';
-
-// AUTRES
-import AppLayout from '@/layouts/app-layout';
-import {
-    index as collectionItemsIndex,
-    create as collectionItemsCreate,
-} from '@/routes/collection-items';
-
-// COMPONENTS - UI
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -32,9 +20,13 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-
-// ICONES
-import { CheckCircle2, CirclePlus, MoreHorizontalIcon, PackageOpen, X } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
+import {
+    index as collectionItemsIndex,
+    create as collectionItemsCreate,
+} from '@/routes/collection-items';
+import type { BreadcrumbItem } from '@/types';
+import type { CollectionItem, ProductConditionEnum } from '@/types/models';
 
 interface Props {
     items: CollectionItem[];

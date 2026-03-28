@@ -1,9 +1,9 @@
 import { Head, useForm } from '@inertiajs/react';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { index as collectionItemsIndex, update } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
 import type { CollectionItem, CollectionItemFormData, Product, ProductConditionEnum, Tcg } from '@/types/models';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import CollectionItemForm from './partials/collection-item-form';
 
 const breadcrumbs: BreadcrumbItem[] = [

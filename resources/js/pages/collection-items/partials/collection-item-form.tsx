@@ -1,8 +1,7 @@
-// REACT
+import type {useForm} from '@inertiajs/react';
+import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
-import { type useForm } from '@inertiajs/react';
 
-// COMPONENTS - UI
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -28,10 +27,6 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
-// ICONES
-import { CalendarIcon } from 'lucide-react';
-
-// TYPES
 import type { CollectionItemFormData, Product, ProductConditionEnum, Tcg } from '@/types/models';
 
 interface Props {
