@@ -13,21 +13,16 @@ use Inertia\Inertia;
 
 class CollectionItemController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorize('viewAny', CollectionItem::class);
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $items = $request->user()
-			->collectionItems()
-			->with('product.set.tcg')
-			->latest()
-			->get();
+            ->collectionItems()
+            ->with('product.set.tcg')
+            ->latest()
+            ->get();
 
         return Inertia::render('collection-items/index', [
             'items' => $items,
@@ -60,6 +55,9 @@ class CollectionItemController extends Controller
      */
     public function store(StoreCollectionItemRequest $request)
     {
+        if ($request->user()->cannot('create', CollectionItem::class)) {
+            abort(403);
+        }
         $request->user()->collectionItems()->create($request->validated());
 
         return redirect()
@@ -70,8 +68,12 @@ class CollectionItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CollectionItem $collectionItem)
+    public function edit(Request $request, CollectionItem $collectionItem)
     {
+        if ($request->user()->cannot('update', $collectionItem)) {
+            abort(403);
+        }
+
         $collectionItem->load('product.set.tcg');
         $products = Product::with('set.tcg')->get();
 
@@ -91,6 +93,9 @@ class CollectionItemController extends Controller
      */
     public function update(UpdateCollectionItemRequest $request, CollectionItem $collectionItem)
     {
+        if ($request->user()->cannot('update', $collectionItem)) {
+            abort(403);
+        }
         $collectionItem->update($request->validated());
 
         return redirect()
@@ -101,8 +106,11 @@ class CollectionItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CollectionItem $collectionItem)
+    public function destroy(Request $request, CollectionItem $collectionItem)
     {
+        if ($request->user()->cannot('delete', $collectionItem)) {
+            abort(403);
+        }
         $collectionItem->delete();
 
         return redirect()
