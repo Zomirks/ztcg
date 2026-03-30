@@ -55,3 +55,9 @@ export interface Tcg {
 	logo_path: string | null;
 	description: string | null;
 }
+
+export interface TcgFormData {
+	name: string;
+	logo: File | null;
+	description: string | null;
+}

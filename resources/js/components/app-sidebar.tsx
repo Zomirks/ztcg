@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as collectionItemsIndex } from '@/routes/collection-items';
-import { index as tcgIndex } from '@/routes/tcg';
+import { index as tcgIndex } from '@/routes/tcgs';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
