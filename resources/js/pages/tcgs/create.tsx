@@ -20,10 +20,10 @@ export default function Create() {
 	const form = useForm<TcgFormData>({
 		name: '',
 		logo: null as File | null,
-		description: '' as string | null,
+		description: null,
 	});
 
-	const handleSubmit = (e: { preventDefault: () => void }) => {
+	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		form.post('/tcgs', {
 			forceFormData: true,

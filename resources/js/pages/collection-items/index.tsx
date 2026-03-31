@@ -24,6 +24,8 @@ import AppLayout from '@/layouts/app-layout';
 import {
     index as collectionItemsIndex,
     create as collectionItemsCreate,
+	edit as collectionItemsEdit,
+	destroy as collectionItemsDestroy,
 } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
 import type { CollectionItem, ProductConditionEnum } from '@/types/models';
@@ -168,7 +170,7 @@ export default function Index({ items, productConditions }: Props) {
 														<DropdownMenuItem
 															onClick={() =>
 																router.visit(
-																	`/collection-items/${item.id}/edit`,
+																	collectionItemsEdit.url(item.id),
 																)
 															}
 														>
@@ -179,7 +181,9 @@ export default function Index({ items, productConditions }: Props) {
 															variant="destructive"
 															onClick={() => {
 																if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-																	router.delete(`/collection-items/${item.id}`);
+																	router.visit(
+																		collectionItemsDestroy.url(item.id),
+																	)
 																}
 															}}
 														>

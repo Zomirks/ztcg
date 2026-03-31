@@ -28,7 +28,7 @@ export default function Edit({ set, tcgs }: Props) {
 		tcg_id: String(set.tcg.id)
 	});
 
-	const handleSubmit = (e: { preventDefault: () => void }) => {
+	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		form.put(update(set.id).url);
 	};

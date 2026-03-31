@@ -116,17 +116,16 @@ export default function Index({ products, languages, productTypes }: Props) {
 											<TableCell>
 												{productTypes.find(c => c.value === product.product_type)?.label}
 											</TableCell>
-											<TableCell>{product.name}</TableCell>
+											<TableCell>{product.name ?? '—'}</TableCell>
 											<TableCell className='text-center'>
 												<Badge>
 													{languages.find(c => c.value === product.language)?.label}
 												</Badge>
 											</TableCell>
 											<TableCell>
-												{new Intl.NumberFormat('fr-FR', {
-													style: 'currency',
-													currency: 'EUR',
-												}).format(Number(product.base_price))}
+												{product.base_price
+													? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(product.base_price))
+													: '—'}
 											</TableCell>
 											<TableCell>
 												{product.release_date
