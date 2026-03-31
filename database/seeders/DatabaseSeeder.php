@@ -40,8 +40,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $flamFantasma = Set::create([
-            'name' => 'Méga-Évolution Flammes Fantasmagoriques',
+            'name' => 'Flammes Fantasmagoriques',
             'code' => 'PFL',
+            'tcg_id' => $pokemon->id,
+        ]);
+
+        $herosTrans = Set::create([
+            'name' => 'Héros Transcendants',
+            'code' => 'ASC',
             'tcg_id' => $pokemon->id,
         ]);
 
@@ -54,6 +60,7 @@ class DatabaseSeeder extends Seeder
         $products = Product::factory()->count(12)->sequence(
             ['set_id' => $megaEvo->id],
             ['set_id' => $flamFantasma->id],
+            ['set_id' => $herosTrans->id],
             ['set_id' => $op10->id],
         )->create();
 
@@ -63,5 +70,19 @@ class DatabaseSeeder extends Seeder
                 'product_id' => $products->random()->id,
             ])
             ->create(['user_id' => $user->id]);
+    }
+
+    public function etb(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'product_type' => ProductType::etb,
+        ]);
+    }
+
+    public function expensive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'base_price' => fake()->randomFloat(2, 200, 500),
+        ]);
     }
 }
