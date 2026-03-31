@@ -1,11 +1,12 @@
 import { Link } from '@inertiajs/react';
 import {
-    BookOpen,
+	BadgeCheck,
+	Barcode,
+	BookOpen,
+	Component,
     FolderGit2,
     LayoutGrid,
     Package,
-    BadgeCheck,
-	Component,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -22,8 +23,9 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as collectionItemsIndex } from '@/routes/collection-items';
-import { index as tcgsIndex } from '@/routes/tcgs';
+import { index as productsIndex } from '@/routes/products';
 import { index as setsIndex } from '@/routes/sets';
+import { index as tcgsIndex } from '@/routes/tcgs';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -31,16 +33,21 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
-    },
+	},
+	{
+		title: 'Produits',
+		href: productsIndex(),
+		icon: Barcode,
+	},
+	{
+		title: 'Sets',
+		href: setsIndex(),
+		icon: Component,
+	},
     {
         title: 'TCG',
         href: tcgsIndex(),
         icon: BadgeCheck,
-    },
-    {
-        title: 'Sets',
-        href: setsIndex(),
-		icon: Component,
     },
     {
         title: 'Ma Collection',

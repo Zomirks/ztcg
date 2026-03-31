@@ -28,11 +28,21 @@ export interface CollectionItemFormData {
 	notes: string;
 }
 
+export interface ProductFormData {
+	name: string;
+	base_price: string;
+	product_type: string;
+	release_date: string;
+	language: string;
+	set_id: string;
+}
+
 export interface Product {
     id: number;
-    name: string;
+    name: string | null;
     base_price: string | null;
     product_type: string;
+	release_date: string | null;
     language: string;
     set: Set;
 }
@@ -40,6 +50,16 @@ export interface Product {
 export interface ProductConditionEnum {
     value: string;
     label: string;
+}
+
+export interface ProductTypeEnum {
+	value: string;
+	label: string;
+}
+
+export interface LanguageEnum {
+	value: string;
+	label: string;
 }
 
 export interface Set {

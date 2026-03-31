@@ -9,6 +9,7 @@ enum ProductType: string
     case Booster = 'booster';
     case Bundle = 'bundle';
     case Tin = 'tin';
+    case MiniTin = 'minitin';
     case Coffret = 'coffret';
     case Other = 'other';
 
@@ -19,7 +20,8 @@ enum ProductType: string
             self::Display => 'Display',
             self::Booster => 'Booster',
             self::Bundle => 'Bundle',
-            self::Tin => 'Tin / Mini-Tin',
+            self::Tin => 'Tin',
+            self::MiniTin => 'Mini-Tin',
             self::Coffret => 'Coffret',
             self::Other => 'Autre',
         };
