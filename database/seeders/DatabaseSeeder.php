@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Zomirks',
             'email' => 'contact@zomirks.fr',
+            'password' => 'test',
         ]);
 
         $pokemon = Tcg::create([
