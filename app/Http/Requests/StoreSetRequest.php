@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Set;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,7 +13,7 @@ class StoreSetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', Set::class);
+        return true;
     }
 
     /**

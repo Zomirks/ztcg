@@ -29,10 +29,8 @@ class SetController extends Controller
     public function create()
     {
         $this->authorize('create', Set::class);
-        $sets = Set::with('tcg')->get();
 
         return Inertia::render('sets/create', [
-            'sets' => $sets,
             'tcgs' => Tcg::all(),
         ]);
     }
