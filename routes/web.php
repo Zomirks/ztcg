@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CollectionItemController;
+use App\Http\Controllers\SetController;
 use App\Http\Controllers\TcgController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -19,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('tcgs', TcgController::class);
+    Route::resource('sets', SetController::class);
 });
 
 require __DIR__.'/settings.php';

@@ -45,8 +45,17 @@ export interface ProductConditionEnum {
 export interface Set {
     id: number;
     name: string;
-    code: string;
-    tcg: Tcg;
+	code: string;
+	tcg: {
+		id: number;
+		name: string;
+	}
+}
+
+export interface SetFormData {
+	name: string;
+	code: string;
+	tcg_id: string;
 }
 
 export interface Tcg {

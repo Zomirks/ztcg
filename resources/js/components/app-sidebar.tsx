@@ -5,6 +5,7 @@ import {
     LayoutGrid,
     Package,
     BadgeCheck,
+	Component,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -21,7 +22,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as collectionItemsIndex } from '@/routes/collection-items';
-import { index as tcgIndex } from '@/routes/tcgs';
+import { index as tcgsIndex } from '@/routes/tcgs';
+import { index as setsIndex } from '@/routes/sets';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -32,8 +34,13 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'TCG',
-        href: tcgIndex(),
+        href: tcgsIndex(),
         icon: BadgeCheck,
+    },
+    {
+        title: 'Sets',
+        href: setsIndex(),
+		icon: Component,
     },
     {
         title: 'Ma Collection',
