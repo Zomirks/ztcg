@@ -38,6 +38,7 @@ class CollectionItemController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', CollectionItem::class);
         $products = Product::with('set.tcg')->get();
 
         return Inertia::render('collection-items/create', [
@@ -55,9 +56,7 @@ class CollectionItemController extends Controller
      */
     public function store(StoreCollectionItemRequest $request)
     {
-        if ($request->user()->cannot('create', CollectionItem::class)) {
-            abort(403);
-        }
+        $this->authorize('create', CollectionItem::class);
         $request->user()->collectionItems()->create($request->validated());
 
         return redirect()
@@ -70,9 +69,7 @@ class CollectionItemController extends Controller
      */
     public function edit(Request $request, CollectionItem $collectionItem)
     {
-        if ($request->user()->cannot('update', $collectionItem)) {
-            abort(403);
-        }
+        $this->authorize('update', $collectionItem);
 
         $collectionItem->load('product.set.tcg');
         $products = Product::with('set.tcg')->get();
@@ -93,9 +90,7 @@ class CollectionItemController extends Controller
      */
     public function update(UpdateCollectionItemRequest $request, CollectionItem $collectionItem)
     {
-        if ($request->user()->cannot('update', $collectionItem)) {
-            abort(403);
-        }
+        $this->authorize('update', $collectionItem);
         $collectionItem->update($request->validated());
 
         return redirect()
@@ -108,9 +103,7 @@ class CollectionItemController extends Controller
      */
     public function destroy(Request $request, CollectionItem $collectionItem)
     {
-        if ($request->user()->cannot('delete', $collectionItem)) {
-            abort(403);
-        }
+        $this->authorize('delete', $collectionItem);
         $collectionItem->delete();
 
         return redirect()

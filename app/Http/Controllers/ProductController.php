@@ -32,7 +32,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-		$this->authorize('create', Product::class);
+        $this->authorize('create', Product::class);
+
         return Inertia::render('products/create', array_merge(
             ['sets' => Set::with('tcg')->get(), 'tcgs' => Tcg::all()],
             $this->enumProps(),
@@ -44,7 +45,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-		$this->authorize('create', Product::class);
+        $this->authorize('create', Product::class);
         Product::create($request->validated());
 
         return redirect()

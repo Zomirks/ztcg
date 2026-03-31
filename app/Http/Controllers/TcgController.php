@@ -28,6 +28,7 @@ class TcgController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Tcg::class);
         return Inertia::render('tcgs/create');
     }
 
@@ -36,9 +37,7 @@ class TcgController extends Controller
      */
     public function store(StoreTcgRequest $request)
     {
-        if ($request->user()->cannot('create', Tcg::class)) {
-            abort(403);
-        }
+        $this->authorize('create', Tcg::class);
 
         $data = $request->safe()->except(['logo']);
         if ($request->hasFile('logo')) {
@@ -64,9 +63,7 @@ class TcgController extends Controller
      */
     public function edit(Request $request, Tcg $tcg)
     {
-        if ($request->user()->cannot('update', $tcg)) {
-            abort(403);
-        }
+        $this->authorize('update', $tcg);
 
         return Inertia::render('tcgs/edit', [
             'tcg' => $tcg,
@@ -78,9 +75,7 @@ class TcgController extends Controller
      */
     public function update(UpdateTcgRequest $request, Tcg $tcg)
     {
-        if ($request->user()->cannot('update', $tcg)) {
-            abort(403);
-        }
+        $this->authorize('update', $tcg);
 
         $data = $request->safe()->except(['logo']);
         if ($request->hasFile('logo')) {
@@ -102,9 +97,7 @@ class TcgController extends Controller
      */
     public function destroy(Request $request, Tcg $tcg)
     {
-        if ($request->user()->cannot('delete', $tcg)) {
-            abort(403);
-        }
+        $this->authorize('delete', $tcg);
 
         $tcg->delete();
 

@@ -28,6 +28,7 @@ class SetController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Set::class);
         $sets = Set::with('tcg')->get();
 
         return Inertia::render('sets/create', [
@@ -41,6 +42,7 @@ class SetController extends Controller
      */
     public function store(StoreSetRequest $request)
     {
+        $this->authorize('create', Set::class);
         Set::create($request->validated());
 
         return redirect()
@@ -61,9 +63,7 @@ class SetController extends Controller
      */
     public function edit(Request $request, Set $set)
     {
-        if ($request->user()->cannot('update', $set)) {
-            abort(403);
-        }
+        $this->authorize('update', $set);
 
         $set->load('tcg');
 
@@ -78,9 +78,7 @@ class SetController extends Controller
      */
     public function update(UpdateSetRequest $request, Set $set)
     {
-        if ($request->user()->cannot('update', $set)) {
-            abort(403);
-        }
+        $this->authorize('update', $set);
         $set->update($request->validated());
 
         return redirect()
@@ -93,9 +91,7 @@ class SetController extends Controller
      */
     public function destroy(Request $request, Set $set)
     {
-        if ($request->user()->cannot('delete', $set)) {
-            abort(403);
-        }
+        $this->authorize('delete', $set);
 
         $set->delete();
 
