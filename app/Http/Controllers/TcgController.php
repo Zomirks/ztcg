@@ -29,6 +29,7 @@ class TcgController extends Controller
     public function create()
     {
         $this->authorize('create', Tcg::class);
+
         return Inertia::render('tcgs/create');
     }
 

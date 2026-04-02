@@ -1,5 +1,4 @@
 import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -10,11 +9,10 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) =>
-        resolvePageComponent(
-            `./pages/${name}.tsx`,
-            import.meta.glob('./pages/**/*.tsx'),
-        ),
+    resolve: async (name) => {
+        const pages = import.meta.glob<{ default: import('react').ComponentType }>('./pages/**/*.tsx');
+        return (await pages[`./pages/${name}.tsx`]()).default;
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
 
