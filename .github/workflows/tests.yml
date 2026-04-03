@@ -28,7 +28,7 @@ jobs:
           MYSQL_PASSWORD: password
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping -u root -ppassword" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="mariadb-admin ping -u root -ppassword --silent" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
       - name: Checkout code
@@ -41,14 +41,24 @@ jobs:
           extensions: pdo_mysql
           tools: composer:v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          npm install
 
       - name: Copy Environment File
         run: cp .env.example .env
 
       - name: Generate Application Key
         run: php artisan key:generate
+
+      - name: Build Assets
+        run: npm run build
 
       - name: Run Migrations
         run: php artisan migrate --force
