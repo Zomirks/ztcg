@@ -100,7 +100,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 										<TableHead className="w-20">Set</TableHead>
 										<TableHead className="w-20">Type</TableHead>
 										<TableHead className="w-40">Nom</TableHead>
-										<TableHead className="w-25">Langue</TableHead>
+										<TableHead className="w-10">Langue</TableHead>
 										<TableHead className="w-25">Prix de base</TableHead>
 										<TableHead className="w-25">Date de sortie</TableHead>
 										<TableHead className="w-20 text-right">
@@ -117,7 +117,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 												{productTypes.find(c => c.value === product.product_type)?.label}
 											</TableCell>
 											<TableCell>{product.name ?? '—'}</TableCell>
-											<TableCell className='text-center'>
+											<TableCell>
 												<Badge>
 													{languages.find(c => c.value === product.language)?.label}
 												</Badge>

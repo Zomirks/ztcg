@@ -7,7 +7,8 @@ export interface CollectionItem {
     notes: string | null;
     product: {
         id: number;
-        name: string;
+		name: string;
+		product_type: string;
         set: {
             id: number;
             name: string;

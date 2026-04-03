@@ -28,18 +28,19 @@ import {
 	destroy as collectionItemsDestroy,
 } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
-import type { CollectionItem, ProductConditionEnum } from '@/types/models';
+import type { CollectionItem, ProductConditionEnum, ProductTypeEnum } from '@/types/models';
 
 interface Props {
     items: CollectionItem[];
 	productConditions: ProductConditionEnum[];
+	productTypes: ProductTypeEnum[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Ma collection', href: collectionItemsIndex() },
 ];
 
-export default function Index({ items, productConditions }: Props) {
+export default function Index({ items, productConditions, productTypes }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
 	const { flash } = usePage<{ flash: { success?: string } }>().props;
@@ -100,13 +101,13 @@ export default function Index({ items, productConditions }: Props) {
 							<Table>
                                 <TableHeader>
 									<TableRow>
-										<TableHead className="w-40">Nom</TableHead>
-										<TableHead className="w-20">Licence</TableHead>
+										<TableHead className="w-25">Licence</TableHead>
 										<TableHead className="w-25">Condition</TableHead>
-										<TableHead className="w-25">Prix d'achat</TableHead>
-										<TableHead className="w-25">Quantité</TableHead>
 										<TableHead className="w-25">Date d'achat</TableHead>
-										<TableHead className="w-25">Notes</TableHead>
+										<TableHead className="">Nom</TableHead>
+										<TableHead className="w-25">Prix d'achat</TableHead>
+										<TableHead className="text-center w-10">Quantité</TableHead>
+										<TableHead className="w-40">Notes</TableHead>
 										<TableHead className="w-20 text-right">
 											Actions
 										</TableHead>
@@ -115,26 +116,11 @@ export default function Index({ items, productConditions }: Props) {
 								<TableBody>
 									{items.map((item) => (
 										<TableRow key={item.id}>
-											<TableCell>
-												<div className="flex flex-col">
-													<span className="font-medium">{item.product.name}</span>
-													<span className="text-xs text-muted-foreground">{item.product.set.name}</span>
-												</div>
-											</TableCell>
 											<TableCell>{item.product.set.tcg.name}</TableCell>
-											<TableCell className='text-center'>
+											<TableCell>
 												<Badge variant={item.product_condition === 'sealed' ? 'default' : 'secondary'}>
 													{productConditions.find(c => c.value === item.product_condition)?.label}
 												</Badge>
-											</TableCell>
-											<TableCell>
-												{new Intl.NumberFormat('fr-FR', {
-													style: 'currency',
-													currency: 'EUR',
-												}).format(Number(item.purchase_price))}
-											</TableCell>
-											<TableCell className='text-center'>
-												{item.quantity}
 											</TableCell>
 											<TableCell>
 												{item.purchase_date
@@ -144,6 +130,21 @@ export default function Index({ items, productConditions }: Props) {
 														day: 'numeric',
 													})
 													: '—'}
+											</TableCell>
+											<TableCell>
+												<div className="flex flex-col">
+													<span className="font-medium">{item.product.name ?? productTypes.find(type => type.value === item.product.product_type)?.label}</span>
+													<span className="text-xs text-muted-foreground">{item.product.set.name}</span>
+												</div>
+											</TableCell>
+											<TableCell>
+												{new Intl.NumberFormat('fr-FR', {
+													style: 'currency',
+													currency: 'EUR',
+												}).format(Number(item.purchase_price))}
+											</TableCell>
+											<TableCell className='text-center'>
+												{item.quantity}
 											</TableCell>
 											<TableCell>
 												{item.notes && item.notes.length > 30

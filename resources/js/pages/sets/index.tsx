@@ -98,9 +98,9 @@ export default function Index({ sets }: Props) {
 							<Table>
 								<TableHeader>
 									<TableRow>
-										<TableHead className="w-40">Licence</TableHead>
-										<TableHead className="w-40">Nom</TableHead>
-										<TableHead className="w-40">Code</TableHead>
+										<TableHead className="w-25">Licence</TableHead>
+										<TableHead className="w-20">Code</TableHead>
+										<TableHead className="">Nom</TableHead>
 										<TableHead className="w-20 text-right">
 											Actions
 										</TableHead>
@@ -110,8 +110,8 @@ export default function Index({ sets }: Props) {
 									{sets.map((set) => (
 										<TableRow key={set.id}>
 											<TableCell>{set.tcg.name}</TableCell>
-											<TableCell>{set.name}</TableCell>
 											<TableCell>{set.code}</TableCell>
+											<TableCell>{set.name}</TableCell>
 											<TableCell className="text-right">
 												<DropdownMenu>
 													<DropdownMenuTrigger

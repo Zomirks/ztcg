@@ -27,12 +27,13 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
-import type { CollectionItemFormData, Product, ProductConditionEnum, Tcg } from '@/types/models';
+import type { CollectionItemFormData, Product, ProductConditionEnum, ProductTypeEnum, Tcg } from '@/types/models';
 
 interface Props {
     form: ReturnType<typeof useForm<CollectionItemFormData>>;
     products: Product[];
     productConditions: ProductConditionEnum[];
+	productTypes: ProductTypeEnum[];
 	tcgs: Tcg[];
     defaultTcgId?: number;
     submitLabel: string;
@@ -44,6 +45,7 @@ export default function CollectionItemForm({
     form,
     products,
     productConditions,
+    productTypes,
 	tcgs,
     defaultTcgId,
     submitLabel,
@@ -159,7 +161,7 @@ export default function CollectionItemForm({
                                         key={product.id}
                                         value={String(product.id)}
                                     >
-                                        {product.set.name} — {product.name}
+										{product.set.name} — {product.name ?? productTypes.find(type => type.value === product.product_type)?.label}
                                     </SelectItem>
                                 ))}
                             </SelectGroup>

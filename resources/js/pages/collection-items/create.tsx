@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { index as collectionItemsIndex } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
-import type { CollectionItemFormData, Product, ProductConditionEnum, Tcg } from '@/types/models';
+import type { CollectionItemFormData, Product, ProductConditionEnum, ProductTypeEnum, Tcg } from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -14,10 +14,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Props {
     products: Product[];
     productConditions: ProductConditionEnum[];
+    productTypes: ProductTypeEnum[];
 	tcgs: Tcg[]
 }
 
-export default function Create({ products, productConditions, tcgs }: Props) {
+export default function Create({ products, productConditions, productTypes, tcgs }: Props) {
     const form = useForm<CollectionItemFormData>({
         product_id: '',
         quantity: 1,
@@ -50,6 +51,7 @@ export default function Create({ products, productConditions, tcgs }: Props) {
                             form={form}
                             products={products}
                             productConditions={productConditions}
+                            productTypes={productTypes}
 							tcgs={tcgs}
                             submitLabel="Ajouter"
                             submittingLabel="Ajout en cours..."
