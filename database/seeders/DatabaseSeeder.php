@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\CollectionItem;
 use App\Models\Product;
-use App\Models\Set;
 use App\Models\Tcg;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -33,35 +32,43 @@ class DatabaseSeeder extends Seeder
             'description' => 'Le jeu de cartes à collectionner One Piece',
         ]);
 
-        $megaEvo = Set::create([
-            'name' => 'Méga-Évolution',
-            'code' => 'MEG',
-            'tcg_id' => $pokemon->id,
+        [$megaEvo, $flamFantasma, $herosTrans, $equiParf, $ecarVio, $evoPaldea, $flamObsi] = $pokemon->sets()->createMany([
+            ['name' => 'Méga-Évolution', 'code' => 'MEG'],
+            ['name' => 'Flammes Fantasmagoriques', 'code' => 'PFL'],
+            ['name' => 'Héros Transcendants', 'code' => 'ASC'],
+            ['name' => 'Équilibre Parfait', 'code' => 'POR'],
+            ['name' => 'Écarlate et Violet', 'code' => 'SVI'],
+            ['name' => 'Évolutions à Paldea', 'code' => 'PAL'],
+            ['name' => 'Flammes Obsidiennes', 'code' => 'OBF'],
         ]);
 
-        $flamFantasma = Set::create([
-            'name' => 'Flammes Fantasmagoriques',
-            'code' => 'PFL',
-            'tcg_id' => $pokemon->id,
+        [$op10, $op11, $op12, $op13, $op14, $op15] = $onePiece->sets()->createMany([
+            ['name' => 'Sang Royal', 'code' => 'OP-10'],
+            ['name' => "Des poings vifs comme l'éclair", 'code' => 'OP-11'],
+            ['name' => "L'héritage du maître", 'code' => 'OP-12'],
+            ['name' => 'Successeurs', 'code' => 'OP-13'],
+            ['name' => "Les sept de la mer d'azur", 'code' => 'OP-14'],
+            ['name' => "Aventure sur l'île de Dieu", 'code' => 'OP-15'],
         ]);
 
-        $herosTrans = Set::create([
-            'name' => 'Héros Transcendants',
-            'code' => 'ASC',
-            'tcg_id' => $pokemon->id,
-        ]);
+        foreach ([$megaEvo, $flamFantasma, $herosTrans, $equiParf, $ecarVio, $evoPaldea, $flamObsi] as $set) {
+            Product::factory()->etb()->create(['set_id' => $set->id]);
+            Product::factory()->display()->create(['set_id' => $set->id, 'base_price' => 189.99]);
+        }
 
-        $op10 = Set::create([
-            'name' => 'Sang Royal',
-            'code' => 'OP-10',
-            'tcg_id' => $onePiece->id,
-        ]);
+        foreach ([$op10, $op11, $op12, $op13, $op14, $op15] as $set) {
+            Product::factory()->display()->create(['set_id' => $set->id, 'base_price' => 134.99]);
+        }
 
         $products = Product::factory()->count(12)->sequence(
             ['set_id' => $megaEvo->id],
             ['set_id' => $flamFantasma->id],
             ['set_id' => $herosTrans->id],
+            ['set_id' => $evoPaldea->id],
             ['set_id' => $op10->id],
+            ['set_id' => $op12->id],
+            ['set_id' => $op14->id],
+            ['set_id' => $op15->id],
         )->create();
 
         CollectionItem::factory()
@@ -70,19 +77,5 @@ class DatabaseSeeder extends Seeder
                 'product_id' => $products->random()->id,
             ])
             ->create(['user_id' => $user->id]);
-    }
-
-    public function etb(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'product_type' => ProductType::etb,
-        ]);
-    }
-
-    public function expensive(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'base_price' => fake()->randomFloat(2, 200, 500),
-        ]);
     }
 }

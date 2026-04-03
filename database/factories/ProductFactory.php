@@ -29,4 +29,20 @@ class ProductFactory extends Factory
             'set_id' => Set::factory(),
         ];
     }
+
+    public function etb(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => null,
+            'product_type' => ProductType::Etb,
+            'base_price' => 55.99,
+        ]);
+    }
+
+    public function display(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'product_type' => ProductType::Display,
+        ]);
+    }
 }
