@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
 	InputGroup,
@@ -26,7 +27,6 @@ import {
 } from '@/components/ui/select';
 
 import type { ProductFormData, LanguageEnum, ProductTypeEnum, Set, Tcg } from '@/types/models';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 
 interface Props {
 	form: ReturnType<typeof useForm<ProductFormData>>;

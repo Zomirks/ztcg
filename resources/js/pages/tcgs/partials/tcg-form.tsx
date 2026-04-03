@@ -1,9 +1,9 @@
-import { FieldGroup, FieldLabel } from "@/components/ui/field";
-import { TcgFormData } from "@/types/models";
+import type { useForm } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
+import { FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Field} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useForm } from "@inertiajs/react";
+import type { TcgFormData } from "@/types/models";
 
 interface Props {
 	form: ReturnType<typeof useForm<TcgFormData>>;

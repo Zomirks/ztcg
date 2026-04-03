@@ -8,7 +8,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { index as setIndex, update } from '@/routes/sets';
 import type { BreadcrumbItem } from '@/types';
-import { Set, SetFormData, Tcg } from '@/types/models';
+import type { Set, SetFormData, Tcg } from '@/types/models';
 import SetForm from './partials/set-form';
 
 const breadcrumbs: BreadcrumbItem[] = [

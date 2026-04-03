@@ -23,7 +23,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { index as productsIndex, create as productsCreate, edit as productsEdit, destroy as productsDestroy } from '@/routes/products';
 import type { BreadcrumbItem } from '@/types';
-import { LanguageEnum, Product, ProductTypeEnum } from "@/types/models";
+import type { LanguageEnum, Product, ProductTypeEnum } from "@/types/models";
 
 interface Props {
 	products: Product[];

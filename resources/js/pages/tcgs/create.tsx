@@ -8,7 +8,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { index as tcgIndex, create as tcgCreate } from '@/routes/tcgs';
 import type { BreadcrumbItem } from '@/types';
-import { TcgFormData } from '@/types/models';
+import type { TcgFormData } from '@/types/models';
 import TcgForm from './partials/tcg-form';
 
 const breadcrumbs: BreadcrumbItem[] = [

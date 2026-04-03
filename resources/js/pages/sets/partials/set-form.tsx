@@ -1,11 +1,11 @@
 import type { useForm } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import type { SetFormData, Tcg } from '@/types/models';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { SetFormData, Tcg } from '@/types/models';
 
 interface Props {
 	form: ReturnType<typeof useForm<SetFormData>>;
