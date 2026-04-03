@@ -28,22 +28,20 @@ import {
 	destroy as collectionItemsDestroy,
 } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
-import type { CollectionItem, ProductConditionEnum, ProductTypeEnum } from '@/types/models';
+import type { CollectionItem } from '@/types/models';
 
 interface Props {
     items: CollectionItem[];
-	productConditions: ProductConditionEnum[];
-	productTypes: ProductTypeEnum[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Ma collection', href: collectionItemsIndex() },
 ];
 
-export default function Index({ items, productConditions, productTypes }: Props) {
+export default function Index({ items }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
-	const { flash } = usePage<{ flash: { success?: string } }>().props;
+	const { flash, enums } = usePage().props;
 	const showFlash = flash?.success && flash.success !== dismissedMessage;
 
     return (
@@ -119,7 +117,7 @@ export default function Index({ items, productConditions, productTypes }: Props)
 											<TableCell>{item.product.set.tcg.name}</TableCell>
 											<TableCell>
 												<Badge variant={item.product_condition === 'sealed' ? 'default' : 'secondary'}>
-													{productConditions.find(c => c.value === item.product_condition)?.label}
+													{enums.productConditions.find(c => c.value === item.product_condition)?.label}
 												</Badge>
 											</TableCell>
 											<TableCell>
@@ -133,7 +131,7 @@ export default function Index({ items, productConditions, productTypes }: Props)
 											</TableCell>
 											<TableCell>
 												<div className="flex flex-col">
-													<span className="font-medium">{item.product.name ?? productTypes.find(type => type.value === item.product.product_type)?.label}</span>
+													<span className="font-medium">{item.product.name ?? enums.productTypes.find(type => type.value === item.product.product_type)?.label}</span>
 													<span className="text-xs text-muted-foreground">{item.product.set.name}</span>
 												</div>
 											</TableCell>

@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { index as collectionItemsIndex, update } from '@/routes/collection-items';
 import type { BreadcrumbItem } from '@/types';
-import type { CollectionItem, CollectionItemFormData, Product, ProductConditionEnum, ProductTypeEnum, Tcg } from '@/types/models';
+import type { CollectionItem, CollectionItemFormData, Product, Tcg } from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -14,12 +14,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Props {
     collection_item: CollectionItem;
     products: Product[];
-    productConditions: ProductConditionEnum[];
-	productTypes: ProductTypeEnum[];
 	tcgs: Tcg[];
 }
 
-export default function Edit({ collection_item, products, productConditions, productTypes, tcgs }: Props) {
+export default function Edit({ collection_item, products, tcgs }: Props) {
     const form = useForm<CollectionItemFormData>({
         product_id: String(collection_item.product.id),
         quantity: collection_item.quantity,
@@ -51,8 +49,6 @@ export default function Edit({ collection_item, products, productConditions, pro
                         <CollectionItemForm
                             form={form}
                             products={products}
-                            productConditions={productConditions}
-							productTypes={productTypes}
 							tcgs={tcgs} 
                             defaultTcgId={collection_item.product.set.tcg.id}
                             submitLabel="Enregistrer"

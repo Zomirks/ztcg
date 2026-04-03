@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ProductCondition;
-use App\Enums\ProductType;
 use App\Http\Requests\StoreCollectionItemRequest;
 use App\Http\Requests\UpdateCollectionItemRequest;
 use App\Models\CollectionItem;
@@ -27,14 +25,6 @@ class CollectionItemController extends Controller
 
         return Inertia::render('collection-items/index', [
             'items' => $items,
-            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
-            'productTypes' => collect(ProductType::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
         ]);
     }
 
@@ -48,14 +38,6 @@ class CollectionItemController extends Controller
 
         return Inertia::render('collection-items/create', [
             'products' => $products,
-            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
-            'productTypes' => collect(ProductType::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
             'tcgs' => Tcg::all(),
         ]);
     }
@@ -86,14 +68,6 @@ class CollectionItemController extends Controller
         return Inertia::render('collection-items/edit', [
             'products' => $products,
             'collection_item' => $collectionItem,
-            'productConditions' => collect(ProductCondition::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
-            'productTypes' => collect(ProductType::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
             'tcgs' => Tcg::all(),
         ]);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ProductCondition;
+use App\Enums\ProductType;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,6 +46,20 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
+            ],
+            'enums' => [
+                'productTypes' => Inertia::once(
+                    fn () => collect(ProductType::cases())->map(fn ($case) => [
+                        'value' => $case->value,
+                        'label' => $case->label(),
+                    ])
+                ),
+                'productConditions' => Inertia::once(
+                    fn () => collect(ProductCondition::cases())->map(fn ($case) => [
+                        'value' => $case->value,
+                        'label' => $case->label(),
+                    ])
+                ),
             ],
         ];
     }

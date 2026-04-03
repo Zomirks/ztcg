@@ -1,3 +1,4 @@
+import { usePage} from '@inertiajs/react';
 import type {useForm} from '@inertiajs/react';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -27,13 +28,11 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
-import type { CollectionItemFormData, Product, ProductConditionEnum, ProductTypeEnum, Tcg } from '@/types/models';
+import type { CollectionItemFormData, Product, Tcg } from '@/types/models';
 
 interface Props {
     form: ReturnType<typeof useForm<CollectionItemFormData>>;
     products: Product[];
-    productConditions: ProductConditionEnum[];
-	productTypes: ProductTypeEnum[];
 	tcgs: Tcg[];
     defaultTcgId?: number;
     submitLabel: string;
@@ -44,8 +43,6 @@ interface Props {
 export default function CollectionItemForm({
     form,
     products,
-    productConditions,
-    productTypes,
 	tcgs,
     defaultTcgId,
     submitLabel,
@@ -53,6 +50,7 @@ export default function CollectionItemForm({
     onSubmit,
 }: Props) {
     const { data, setData, processing, errors } = form;
+	const { enums } = usePage().props;
 
     const [selectedTcgId, setSelectedTcgId] = useState<string>(
         defaultTcgId ? String(defaultTcgId) : '',
@@ -161,7 +159,7 @@ export default function CollectionItemForm({
                                         key={product.id}
                                         value={String(product.id)}
                                     >
-										{product.set.name} — {product.name ?? productTypes.find(type => type.value === product.product_type)?.label}
+										{product.set.name} — {product.name ?? enums.productTypes.find(type => type.value === product.product_type)?.label}
                                     </SelectItem>
                                 ))}
                             </SelectGroup>
@@ -193,7 +191,7 @@ export default function CollectionItemForm({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {productConditions.map((condition) => (
+								{enums.productConditions.map((condition) => (
                                     <SelectItem
                                         key={condition.value}
                                         value={condition.value}
