@@ -1,0 +1,76 @@
+name: Deploy zTCG
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, xml, ctype, json, curl, pdo_mysql
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install & build assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Set deploy target
+        id: target
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "path=ztcg.cyril-fischer.com" >> $GITHUB_OUTPUT
+          else
+            echo "path=preprod.ztcg.cyril-fischer.com" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -azv --delete \
+            --exclude='.env' \
+            --exclude='storage/logs' \
+            --exclude='storage/framework/cache' \
+            --exclude='storage/framework/sessions' \
+            --exclude='storage/framework/views' \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/sites/${{ steps.target.outputs.path }}/
+
+      - name: Post-deploy commands
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/sites/${{ steps.target.outputs.path }}
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+          EOF
