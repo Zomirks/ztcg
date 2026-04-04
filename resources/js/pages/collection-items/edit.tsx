@@ -1,15 +1,8 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as collectionItemsIndex, update } from '@/routes/collection-items';
-import type { BreadcrumbItem } from '@/types';
 import type { CollectionItem, CollectionItemFormData, Product, Tcg } from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Ma collection', href: collectionItemsIndex() },
-    { title: 'Modifier', href: '' },
-];
 
 interface Props {
     collection_item: CollectionItem;
@@ -33,7 +26,7 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="Modifier" />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -58,6 +51,13 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </>
     );
+}
+
+Edit.layout = {
+	breadcrumbs: [
+		{ title: 'Ma collection', href: collectionItemsIndex() },
+		{ title: 'Modifier', href: '' },
+	]
 }

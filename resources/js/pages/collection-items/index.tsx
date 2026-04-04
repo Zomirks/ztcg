@@ -20,23 +20,17 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import AppLayout from '@/layouts/app-layout';
 import {
     index as collectionItemsIndex,
     create as collectionItemsCreate,
 	edit as collectionItemsEdit,
 	destroy as collectionItemsDestroy,
 } from '@/routes/collection-items';
-import type { BreadcrumbItem } from '@/types';
 import type { CollectionItem } from '@/types/models';
 
 interface Props {
     items: CollectionItem[];
 }
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Ma collection', href: collectionItemsIndex() },
-];
 
 export default function Index({ items }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
@@ -45,7 +39,7 @@ export default function Index({ items }: Props) {
 	const showFlash = flash?.success && flash.success !== dismissedMessage;
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="Ma Collection" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -199,6 +193,12 @@ export default function Index({ items }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-        </AppLayout>
+        </>
     );
+}
+
+Index.layout = {
+	breadcrumbs: [
+		{ title: 'Ma collection', href: collectionItemsIndex() },
+	]
 }

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Enums\ProductCondition;
 use App\Enums\ProductType;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware

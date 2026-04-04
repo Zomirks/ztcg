@@ -24,25 +24,21 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import AppLayout from '@/layouts/app-layout';
 import { index as setIndex, create as setCreate, edit as setEdit, destroy as setDestroy } from '@/routes/sets';
-import type { BreadcrumbItem } from '@/types';
 import type { Set } from '@/types/models';
 
 interface Props {
 	sets: Set[];
 }
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Sets', href: setIndex() }];
-
 export default function Index({ sets }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
-	const { flash } = usePage<{ flash: { success?: string } }>().props;
+	const { flash } = usePage().props;
 	const showFlash = flash?.success && flash.success !== dismissedMessage;
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Set" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -160,6 +156,12 @@ export default function Index({ sets }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Index.layout = {
+	breadcrumbs: [
+		{ title: 'Sets', href: setIndex() }
+	]
 }

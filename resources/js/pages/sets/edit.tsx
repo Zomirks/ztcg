@@ -5,16 +5,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as setIndex, update } from '@/routes/sets';
-import type { BreadcrumbItem } from '@/types';
 import type { Set, SetFormData, Tcg } from '@/types/models';
 import SetForm from './partials/set-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'Set', href: setIndex() },
-	{ title: 'Modifier un set', href: '' }
-];
 
 interface Props {
 	set: Set;
@@ -34,7 +27,7 @@ export default function Edit({ set, tcgs }: Props) {
 	};
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Modifier un set" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -55,6 +48,13 @@ export default function Edit({ set, tcgs }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Edit.layout = {
+	breadcrumbs: [
+		{ title: 'Set', href: setIndex() },
+		{ title: 'Modifier un set', href: '' }
+	]
 }

@@ -5,16 +5,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as tcgIndex, create as tcgCreate } from '@/routes/tcgs';
-import type { BreadcrumbItem } from '@/types';
 import type { TcgFormData } from '@/types/models';
 import TcgForm from './partials/tcg-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'TCG', href: tcgIndex() },
-	{ title: 'Ajouter une licence TCG', href: tcgCreate() }
-];
 
 export default function Create() {
 	const form = useForm<TcgFormData>({
@@ -31,7 +24,7 @@ export default function Create() {
 	};
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Ajouter une licence TCG" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -51,6 +44,13 @@ export default function Create() {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Create.layout = {
+	breadcrumbs: [
+		{ title: 'TCG', href: tcgIndex() },
+		{ title: 'Ajouter une licence TCG', href: tcgCreate() }
+	]
 }

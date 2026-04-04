@@ -24,25 +24,21 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import AppLayout from '@/layouts/app-layout';
 import { index as tcgIndex, create as tcgCreate, edit as tcgEdit, destroy as tcgDestroy } from '@/routes/tcgs';
-import type { BreadcrumbItem } from '@/types';
 import type { Tcg } from '@/types/models';
 
 interface Props {
     tcgs: Tcg[];
 }
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'TCG', href: tcgIndex() }];
-
 export default function Index({ tcgs }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
-	const { flash } = usePage<{ flash: { success?: string } }>().props;
+	const { flash } = usePage().props;
 	const showFlash = flash?.success && flash.success !== dismissedMessage;
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="TCG" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -174,6 +170,12 @@ export default function Index({ tcgs }: Props) {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </>
     );
+}
+
+Index.layout = {
+	breadcrumbs: [
+		{ title: 'TCG', href: tcgIndex() }
+	]
 }

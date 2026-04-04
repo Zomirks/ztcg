@@ -5,16 +5,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as tcgIndex, update } from '@/routes/tcgs';
-import type { BreadcrumbItem } from '@/types';
 import type { Tcg, TcgFormData } from '@/types/models';
 import TcgForm from './partials/tcg-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'TCG', href: tcgIndex() },
-	{ title: 'Modifier une licence TCG', href: '' }
-];
 
 interface Props {
 	tcg: Tcg;
@@ -35,7 +28,7 @@ export default function Edit({ tcg }: Props) {
 	};
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Modifier une licence TCG" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -56,6 +49,13 @@ export default function Edit({ tcg }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Edit.layout = {
+	breadcrumbs: [
+		{ title: 'TCG', href: tcgIndex() },
+		{ title: 'Modifier une licence TCG', href: '' }
+	]
 }

@@ -1,15 +1,8 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as setsIndex } from '@/routes/sets';
-import type { BreadcrumbItem } from '@/types';
 import type { SetFormData, Tcg } from '@/types/models';
 import SetForm from './partials/set-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'Sets', href: setsIndex() },
-	{ title: 'Ajouter', href: '' },
-];
 
 interface Props {
 	tcgs: Tcg[]
@@ -28,7 +21,7 @@ export default function Create({ tcgs }: Props) {
 	};
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Ajouter" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -51,6 +44,13 @@ export default function Create({ tcgs }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Create.layout = {
+	breadcrumbs: [
+		{ title: 'Sets', href: setsIndex() },
+		{ title: 'Ajouter', href: '' },
+	]
 }

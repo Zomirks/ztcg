@@ -1,15 +1,8 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { index as productsIndex, update } from '@/routes/products';
-import type { BreadcrumbItem } from '@/types';
 import type { ProductFormData, LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'Produits', href: productsIndex() },
-	{ title: 'Modifier', href: '' },
-];
 
 interface Props {
 	sets: Set[];
@@ -35,7 +28,7 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 	};
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Modifier" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -62,6 +55,13 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	);
+}
+
+Edit.layout = {
+	breadcrumbs: [
+		{ title: 'Produits', href: productsIndex() },
+		{ title: 'Modifier', href: '' },
+	]
 }

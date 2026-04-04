@@ -20,9 +20,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import AppLayout from '@/layouts/app-layout';
 import { index as productsIndex, create as productsCreate, edit as productsEdit, destroy as productsDestroy } from '@/routes/products';
-import type { BreadcrumbItem } from '@/types';
 import type { LanguageEnum, Product, ProductTypeEnum } from "@/types/models";
 
 interface Props {
@@ -30,19 +28,14 @@ interface Props {
 	languages: LanguageEnum[];
 	productTypes: ProductTypeEnum[];
 }
-
-const breadcrumbs: BreadcrumbItem[] = [
-	{ title: 'Produits', href: productsIndex() },
-];
-
 export default function Index({ products, languages, productTypes }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
-	const { flash } = usePage<{ flash: { success?: string } }>().props;
+	const { flash } = usePage().props;
 	const showFlash = flash?.success && flash.success !== dismissedMessage;
 
 	return (
-		<AppLayout breadcrumbs={breadcrumbs}>
+		<>
 			<Head title="Liste des Produits" />
 
 			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -186,6 +179,12 @@ export default function Index({ products, languages, productTypes }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</AppLayout>
+		</>
 	)
+}
+
+Index.layout = {
+	breadcrumbs: [
+		{ title: 'Produits', href: productsIndex() },
+	]
 }
