@@ -16,14 +16,22 @@ interface Props {
 
 export default function Edit({ set, tcgs }: Props) {
 	const form = useForm<SetFormData>({
+		tcg_id: String(set.tcg.id),
+		logo: null as File | null,
 		name: set.name,
-		code: set.code,
-		tcg_id: String(set.tcg.id)
+		code: set.code ?? '',
+		print_code: set.print_code ?? '',
+		series: set.series ?? '',
+		total_cards: set.total_cards ?? null,
+		description: set.description ?? '',
+		release_date: set.release_date ?? '',
 	});
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		form.put(update(set.id).url);
+		form.put(update(set.id).url, {
+			forceFormData: true,
+		});
 	};
 
 	return (
@@ -38,6 +46,13 @@ export default function Edit({ set, tcgs }: Props) {
 						</div>
 					</CardHeader>
 					<CardContent>
+						{set.logo_url && !form.data.logo && (
+							<img
+								src={set.logo_url}
+								alt="Logo actuel"
+								className="h-16 w-16 rounded object-contain border border-border mb-4"
+							/>
+						)}
 						<SetForm
 							form={form}
 							tcgs={tcgs}
