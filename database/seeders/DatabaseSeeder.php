@@ -33,13 +33,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         [$megaEvo, $flamFantasma, $herosTrans, $equiParf, $ecarVio, $evoPaldea, $flamObsi] = $pokemon->sets()->createMany([
-            ['name' => 'Méga-Évolution', 'code' => 'MEG'],
-            ['name' => 'Flammes Fantasmagoriques', 'code' => 'PFL'],
-            ['name' => 'Héros Transcendants', 'code' => 'ASC'],
-            ['name' => 'Équilibre Parfait', 'code' => 'POR'],
-            ['name' => 'Écarlate et Violet', 'code' => 'SVI'],
-            ['name' => 'Évolutions à Paldea', 'code' => 'PAL'],
-            ['name' => 'Flammes Obsidiennes', 'code' => 'OBF'],
+            ['name' => 'Méga-Évolution', 'code' => 'ME1', 'print_code' => 'MEG'],
+            ['name' => 'Flammes Fantasmagoriques', 'code' => 'ME2', 'print_code' => 'PFL'],
+            ['name' => 'Héros Transcendants', 'code' => 'ME2.5', 'print_code' => 'ASC'],
+            ['name' => 'Équilibre Parfait', 'code' => 'ME3', 'print_code' => 'POR'],
+            ['name' => 'Écarlate et Violet', 'code' => 'EV1', 'print_code' => 'SVI'],
+            ['name' => 'Évolutions à Paldea', 'code' => 'EV2', 'print_code' => 'PAL'],
+            ['name' => 'Flammes Obsidiennes', 'code' => 'EV3', 'print_code' => 'OBF'],
         ]);
 
         [$op10, $op11, $op12, $op13, $op14, $op15] = $onePiece->sets()->createMany([
