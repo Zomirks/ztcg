@@ -11,13 +11,21 @@ interface Props {
 export default function Create({ tcgs }: Props) {
 	const form = useForm<SetFormData>({
 		tcg_id: '',
+		logo: null as File | null,
 		name: '',
 		code: '',
+		print_code: '',
+		series: '',
+		total_cards: null,
+		description: '',
+		release_date: '',
 	});
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		form.post('/sets');
+		form.post('/sets', {
+			forceFormData: true,
+		});
 	};
 
 	return (

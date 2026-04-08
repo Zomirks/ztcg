@@ -28,6 +28,12 @@ class UpdateSetRequest extends FormRequest
             'name' => ['sometimes', 'string'],
             'code' => ['sometimes', 'string',
                 Rule::unique('sets', 'code')->where('tcg_id', $this->input('tcg_id'))->ignore($this->route('set'))],
+            'print_code' => ['sometimes', 'nullable', 'string'],
+            'logo' => ['sometimes', 'nullable', 'image', 'max:2048'],
+            'description' => ['sometimes', 'nullable', 'string'],
+            'series' => ['sometimes', 'nullable', 'string'],
+            'total_cards' => ['sometimes', 'nullable', 'numeric', 'min:1'],
+            'release_date' => ['sometimes', 'nullable', 'date'],
         ];
     }
 }
