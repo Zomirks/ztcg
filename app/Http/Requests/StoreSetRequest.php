@@ -40,8 +40,9 @@ class StoreSetRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code.unique' => 'Ce code existe déjà.',
+            'tcg_id.required' => 'Veuillez sélectionner une licence.',
             'tcg_id.exists' => 'Cette licence de TCG n\'existe pas.',
+            'code.unique' => 'Ce code existe déjà pour cette licence.',
         ];
     }
 }
