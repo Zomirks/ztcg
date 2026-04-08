@@ -95,8 +95,14 @@ export default function Index({ sets }: Props) {
 								<TableHeader>
 									<TableRow>
 										<TableHead className="w-25">Licence</TableHead>
+										<TableHead className="w-40">Logo</TableHead>
 										<TableHead className="w-20">Code</TableHead>
+										<TableHead className="w-20">Code carte</TableHead>
 										<TableHead className="">Nom</TableHead>
+										<TableHead className="w-40">Série</TableHead>
+										<TableHead className="">Description</TableHead>
+										<TableHead className="w-15">Total de cartes</TableHead>
+										<TableHead className="w-15">Date de sortie</TableHead>
 										<TableHead className="w-20 text-right">
 											Actions
 										</TableHead>
@@ -106,8 +112,32 @@ export default function Index({ sets }: Props) {
 									{sets.map((set) => (
 										<TableRow key={set.id}>
 											<TableCell>{set.tcg.name}</TableCell>
+											<TableCell>
+												{set.logo_url ? (
+													<img
+														src={set.logo_url}
+														alt={set.name}
+														className='h-12 w-24 rounded object-contain'
+													/>
+												) : (
+													<span className="text-muted-foreground">-</span>
+												)}
+											</TableCell>
 											<TableCell>{set.code}</TableCell>
+											<TableCell>{set.print_code ?? '-'}</TableCell>
 											<TableCell>{set.name}</TableCell>
+											<TableCell>{set.series}</TableCell>
+											<TableCell>{set.description ?? '-'}</TableCell>
+											<TableCell>{set.total_cards ?? '-'}</TableCell>
+											<TableCell>
+												{set.release_date
+													? new Date(set.release_date + 'T00:00:00').toLocaleDateString('fr-FR', {
+														year: 'numeric',
+														month: 'numeric',
+														day: 'numeric',
+													})
+													: '—'}
+											</TableCell>
 											<TableCell className="text-right">
 												<DropdownMenu>
 													<DropdownMenuTrigger
@@ -137,11 +167,13 @@ export default function Index({ sets }: Props) {
 														<DropdownMenuSeparator />
 														<DropdownMenuItem
 															variant="destructive"
-															onClick={() =>
-																router.delete(
-																	setDestroy.url(set),
-																)
-															}
+															onClick={() => {
+																if (confirm('Êtes-vous sûr de vouloir supprimer ce set ?')) {
+																	router.delete(
+																		setDestroy.url(set),
+																	)
+																}
+															}}
 														>
 															Supprimer
 														</DropdownMenuItem>

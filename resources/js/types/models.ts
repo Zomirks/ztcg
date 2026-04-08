@@ -64,9 +64,16 @@ export interface LanguageEnum {
 }
 
 export interface Set {
-    id: number;
-    name: string;
+	id: number;
+	logo_path: string | null;
+	logo_url: string | null;
+	name: string;
 	code: string;
+	print_code: string | null;
+	series: string | null;
+	total_cards: number | null;
+	description: string | null;
+	release_date: string | null
 	tcg: {
 		id: number;
 		name: string;
@@ -74,8 +81,14 @@ export interface Set {
 }
 
 export interface SetFormData {
+	logo: File | null;
 	name: string;
 	code: string;
+	print_code: string;
+	series: string;
+	total_cards: number | null;
+	description: string;
+	release_date: string;
 	tcg_id: string;
 }
 
