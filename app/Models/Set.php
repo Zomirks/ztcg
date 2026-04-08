@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Set extends Model
 {
@@ -14,9 +15,21 @@ class Set extends Model
     protected $fillable = [
         'name',
         'code',
-        'tcg_id',
+        'print_code',
+        'series',
+        'description',
+        'logo_path',
+        'total_cards',
         'release_date',
+        'tcg_id',
     ];
+
+    protected $appends = ['logo_url'];
+
+    public function getLogoUrlAttribute(): ?string
+    {
+        return $this->logo_path ? Storage::disk('public')->url($this->logo_path) : null;
+    }
 
     public function tcg(): BelongsTo
     {

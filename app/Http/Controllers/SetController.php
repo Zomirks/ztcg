@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateSetRequest;
 use App\Models\Set;
 use App\Models\Tcg;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class SetController extends Controller
@@ -41,7 +42,12 @@ class SetController extends Controller
     public function store(StoreSetRequest $request)
     {
         $this->authorize('create', Set::class);
-        Set::create($request->validated());
+
+        $data = $request->safe()->except(['logo']);
+        if ($request->hasFile('logo')) {
+            $data['logo_path'] = $request->file('logo')->store('set-logos', 'public');
+        }
+        Set::create($data);
 
         return redirect()
             ->route('sets.index')
@@ -77,7 +83,15 @@ class SetController extends Controller
     public function update(UpdateSetRequest $request, Set $set)
     {
         $this->authorize('update', $set);
-        $set->update($request->validated());
+        $data = $request->safe()->except(['logo']);
+        if ($request->hasFile('logo')) {
+            if ($set->logo_path) {
+                Storage::disk('public')->delete($set->logo_path);
+            }
+
+            $data['logo_path'] = $request->file('logo')->store('set-logos', 'public');
+        }
+        $set->update($data);
 
         return redirect()
             ->route('sets.index')

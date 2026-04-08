@@ -28,6 +28,12 @@ class StoreSetRequest extends FormRequest
             'name' => ['required', 'string'],
             'code' => ['required', 'string',
                 Rule::unique('sets', 'code')->where('tcg_id', $this->input('tcg_id'))],
+            'print_code' => ['nullable', 'string'],
+            'logo' => ['nullable', 'image', 'max:2048'],
+            'description' => ['nullable', 'string'],
+            'series' => ['nullable', 'string'],
+            'total_cards' => ['nullable', 'numeric', 'min:1'],
+            'release_date' => ['nullable', 'date'],
         ];
     }
 
