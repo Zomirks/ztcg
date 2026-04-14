@@ -5,6 +5,14 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import {
+	Combobox,
+	ComboboxContent,
+	ComboboxEmpty,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxList,
+} from "@/components/ui/combobox"
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
@@ -58,9 +66,12 @@ export default function ProductForm({
 		defaultTcgId ? String(defaultTcgId) : '',
 	);
 
-	const filteredProducts = selectedTcgId
+	const filteredSets = selectedTcgId
 		? sets.filter((set) => set.tcg.id === Number(selectedTcgId))
 		: [];
+
+	const setItems = filteredSets.map((set) => String(set.id));
+	const setLabelMap = new Map(filteredSets.map((set) => [String(set.id), `${set.code} - ${set.name}`]));
 
 	return (
 		<form onSubmit={onSubmit}>
@@ -111,7 +122,7 @@ export default function ProductForm({
 					</Field>
 
 					<Field>
-						<FieldLabel htmlFor="tcg_id">Licence</FieldLabel>
+						<FieldLabel htmlFor="tcg_id">Licence  <span className="text-destructive">*</span></FieldLabel>
 						<Select
 							value={selectedTcgId}
 							onValueChange={(value) => {
@@ -138,34 +149,28 @@ export default function ProductForm({
 					</Field>
 
 					<Field>
-						<FieldLabel htmlFor="set_id">Set</FieldLabel>
-						<Select
-							name="set_id"
+						<FieldLabel htmlFor="set_id">Set  <span className="text-destructive">*</span></FieldLabel>
+						<Combobox
 							value={data.set_id}
-							onValueChange={(value) => setData('set_id', value)}
+							onValueChange={(value) => setData('set_id', value as string)}
 							disabled={!selectedTcgId}
+							items={setItems}
+							itemToStringLabel={(id) => setLabelMap.get(id) ?? id}
 						>
-							<SelectTrigger id="set_id" className="w-full">
-								<SelectValue
-									placeholder={!selectedTcgId
-										? 'Veuillez sélectionner une licence'
-										: 'Sélectionnez un set'
-									}
-								/>
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{filteredProducts.map((set) => (
-										<SelectItem
-											key={set.id}
-											value={String(set.id)}
-										>
-											{set.name}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
+							<ComboboxInput
+								placeholder={!selectedTcgId ? 'Veuillez sélectionner une licence' : 'Sélectionnez un set'}
+							/>
+							<ComboboxContent>
+								<ComboboxEmpty>Aucun set trouvé.</ComboboxEmpty>
+								<ComboboxList>
+									{(id: string) => (
+										<ComboboxItem value={id}>
+											{setLabelMap.get(id)}
+										</ComboboxItem>
+									)}
+								</ComboboxList>
+							</ComboboxContent>
+						</Combobox>
 						{errors.set_id && (
 							<p className="text-sm text-destructive">
 								{errors.set_id}
@@ -175,11 +180,12 @@ export default function ProductForm({
 
 					<Field>
 						<FieldLabel htmlFor="product_type">
-							Type de produit
+							Type de produit <span className="text-destructive">*</span>
 						</FieldLabel>
 						<Select
 							name="product_type"
 							value={data.product_type}
+							required
 							onValueChange={(value) =>
 								setData('product_type', value)
 							}
@@ -212,7 +218,7 @@ export default function ProductForm({
 
 					<Field>
 						<FieldLabel htmlFor="language">
-							Langue
+							Langue  <span className="text-destructive">*</span>
 						</FieldLabel>
 						<Select
 							name="language"

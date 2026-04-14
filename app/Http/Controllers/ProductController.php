@@ -35,7 +35,10 @@ class ProductController extends Controller
         $this->authorize('create', Product::class);
 
         return Inertia::render('products/create', array_merge(
-            ['sets' => Set::with('tcg')->get(), 'tcgs' => Tcg::all()],
+            [
+                'sets' => Set::with('tcg')->orderBy('release_date', 'desc')->get(),
+                'tcgs' => Tcg::all(),
+            ],
             $this->enumProps(),
         ));
     }
@@ -71,7 +74,11 @@ class ProductController extends Controller
         $product->load('set.tcg');
 
         return Inertia::render('products/edit', array_merge(
-            ['product' => $product, 'sets' => Set::with('tcg')->get(), 'tcgs' => Tcg::all()],
+            [
+                'product' => $product,
+                'sets' => Set::with('tcg')->orderBy('release_date', 'desc')->get(),
+                'tcgs' => Tcg::all(),
+            ],
             $this->enumProps(),
         ));
     }
