@@ -163,7 +163,7 @@ export default function Index({ items }: Props) {
 														<DropdownMenuItem
 															onClick={() =>
 																router.visit(
-																	collectionItemsEdit.url(item.id),
+																	collectionItemsEdit.url(item),
 																)
 															}
 														>
@@ -174,8 +174,8 @@ export default function Index({ items }: Props) {
 															variant="destructive"
 															onClick={() => {
 																if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-																	router.visit(
-																		collectionItemsDestroy.url(item.id),
+																	router.delete(
+																		collectionItemsDestroy.url(item),
 																	)
 																}
 															}}
