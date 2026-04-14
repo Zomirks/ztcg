@@ -1,4 +1,5 @@
 import type { useForm } from '@inertiajs/react';
+import { fr } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 
@@ -265,10 +266,12 @@ export default function ProductForm({
 									</span>
 								</Button>
 							</PopoverTrigger>
-							<PopoverContent className="w-auto p-0 bg-surface border-border">
+							<PopoverContent className="p-0">
 								<Calendar
 									mode="single"
 									required
+									locale={fr}
+									captionLayout="dropdown"
 									selected={
 										data.release_date ? new Date(data.release_date + 'T00:00:00') : undefined
 									}
