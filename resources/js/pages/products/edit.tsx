@@ -1,8 +1,9 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { index as productsIndex, update } from '@/routes/products';
-import type { ProductFormData, LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
+import type { LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
+import { useProductForm } from './partials/use-product-form';
 
 interface Props {
 	sets: Set[];
@@ -13,14 +14,7 @@ interface Props {
 }
 
 export default function Edit({ product, productTypes, sets, languages, tcgs }: Props) {
-	const form = useForm<ProductFormData>({
-		name: product.name ?? '',
-		language: product.language,
-		base_price: product.base_price ?? '',
-		release_date: product.release_date ?? '',
-		product_type: product.product_type,
-		set_id: String(product.set.id),
-	});
+	const form = useProductForm(product);
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
