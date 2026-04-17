@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as productsIndex, update } from '@/routes/products';
+import { index as productsIndex } from '@/routes/products';
 import type { LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
 import { useProductForm } from './partials/use-product-form';
@@ -14,12 +14,7 @@ interface Props {
 }
 
 export default function Edit({ product, productTypes, sets, languages, tcgs }: Props) {
-	const form = useProductForm(product);
-
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		form.put(update(product.id).url);
-	};
+	const {form, submit} = useProductForm(product);
 
 	return (
 		<>
@@ -44,7 +39,7 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 							defaultTcgId={product.set.tcg.id}
 							submitLabel="Modifier"
 							submittingLabel="Modification en cours..."
-							onSubmit={handleSubmit}
+							onSubmit={submit}
 						/>
 					</CardContent>
 				</Card>

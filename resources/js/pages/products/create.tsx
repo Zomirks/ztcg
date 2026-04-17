@@ -13,12 +13,7 @@ interface Props {
 }
 
 export default function Create({ productTypes, sets, languages, tcgs }: Props) {
-	const form = useProductForm();
-
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		form.post('/products');
-	};
+	const {form, submit} = useProductForm();
 
 	return (
 		<>
@@ -42,7 +37,7 @@ export default function Create({ productTypes, sets, languages, tcgs }: Props) {
 							tcgs={tcgs}
 							submitLabel="Ajouter"
 							submittingLabel="Ajout en cours..."
-							onSubmit={handleSubmit}
+							onSubmit={submit}
 						/>
 					</CardContent>
 				</Card>

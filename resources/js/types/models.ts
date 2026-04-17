@@ -31,19 +31,26 @@ export interface CollectionItemFormData {
 
 export interface ProductFormData {
 	name: string;
+	image: File | null;
 	base_price: string;
 	product_type: string;
 	release_date: string;
+	barcode: string | null;
+	boosters_count: number | null;
 	language: string;
 	set_id: string;
 }
 
 export interface Product {
-    id: number;
+	id: number;
+	image_path: string | null;
+	image_url: string | null;
     name: string | null;
     base_price: string | null;
     product_type: string;
 	release_date: string | null;
+	barcode: string | null;
+	boosters_count: number | null;
     language: string;
     set: Set;
 }
