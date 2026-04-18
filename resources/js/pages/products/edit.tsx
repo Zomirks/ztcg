@@ -33,6 +33,7 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 						<ProductForm
 							form={form}
 							sets={sets}
+							product={product}
 							productTypes={productTypes}
 							languages={languages}
 							tcgs={tcgs}
