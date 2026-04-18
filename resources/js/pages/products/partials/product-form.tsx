@@ -34,6 +34,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { formatDateFr, parseIsoDate, toIsoDate } from '@/lib/date';
 
 import type { ProductFormData, LanguageEnum, ProductTypeEnum, Set, Tcg } from '@/types/models';
 
@@ -253,7 +254,7 @@ export default function ProductForm({
 						)}
 					</Field>
 
-					<Field className="flex flex-col gap-y-2">
+					<Field>
 						<FieldLabel htmlFor="release_date">Date de sortie</FieldLabel>
 						<Popover>
 							<PopoverTrigger asChild>
@@ -264,11 +265,7 @@ export default function ProductForm({
 								>
 									<CalendarIcon />
 									<span className={!data.release_date ? 'text-muted-foreground' : ''}>
-										{data.release_date ? new Date(data.release_date + 'T00:00:00').toLocaleDateString('fr-FR', {
-											year: 'numeric',
-											month: 'long',
-											day: 'numeric',
-										}) : 'Sélectionnez une date'}
+										{data.release_date ? formatDateFr(data.release_date) : 'Sélectionnez une date'}
 									</span>
 								</Button>
 							</PopoverTrigger>
@@ -279,13 +276,10 @@ export default function ProductForm({
 									locale={fr}
 									captionLayout="dropdown"
 									selected={
-										data.release_date ? new Date(data.release_date + 'T00:00:00') : undefined
+										data.release_date ? parseIsoDate(data.release_date) : undefined
 									}
 									onSelect={(date) => {
-										const year = date.getFullYear();
-										const month = String(date.getMonth() + 1).padStart(2, '0');
-										const day = String(date.getDate()).padStart(2, '0');
-										setData('release_date', `${year}-${month}-${day}`);
+										setData('release_date', toIsoDate(date));
 									}}
 								/>
 							</PopoverContent>
