@@ -51,6 +51,7 @@ class UpdateProductRequest extends FormRequest
             'image.max' => 'L\'image téléchargée est trop lourde',
             'image.mimes' => 'Le type d\'image téléchargée n\'est pas supporté',
             'release_date.date' => 'La date de sortie est invalide.',
+            'remove_image' => ['sometimes', 'boolean'],
         ];
     }
 }

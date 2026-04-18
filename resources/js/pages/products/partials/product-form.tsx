@@ -1,7 +1,7 @@
 import type { useForm } from '@inertiajs/react';
 import { fr } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { CalendarIcon, XIcon } from 'lucide-react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -57,6 +57,39 @@ export default function ProductForm({
 	onSubmit,
 }: Props) {
 	const { data, setData, processing, errors } = form;
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const previewUrl = useMemo(() => {
+		if (data.image instanceof File) {
+			return URL.createObjectURL(data.image);
+		}
+
+		if (product?.image_url && !data.remove_image) {
+			return product.image_url;
+		}
+
+		return null;
+	}, [data.image, data.remove_image, product?.image_url]);
+
+	useEffect(() => {
+		if (!(data.image instanceof File) || !previewUrl) {
+			return;
+		}
+
+		return () => URL.revokeObjectURL(previewUrl);
+	}, [data.image, previewUrl]);
+
+	const handleRemoveImage = () => {
+		if (data.image instanceof File) {
+			setData('image', null);
+
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
+		} else {
+			setData('remove_image', true);
+		}
+	};
 
 	return (
 		<form onSubmit={onSubmit}>
@@ -78,6 +111,43 @@ export default function ProductForm({
 								{errors.name}
 							</p>
 						)}
+					</Field>
+
+					<Field>
+						<FieldLabel htmlFor='image'>Image</FieldLabel>
+						{previewUrl && (
+							<div className="mt-2">
+								<div className="relative w-fit">
+									<img
+										src={previewUrl}
+										alt="Aperçu"
+										className="h-32 w-32 rounded-md border object-cover"
+									/>
+									<Button
+										type="button"
+										variant="destructive"
+										size="icon"
+										className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+										onClick={handleRemoveImage}
+										aria-label="Supprimer l'image"
+									>
+										<XIcon className="h-3 w-3" />
+									</Button>
+								</div>
+							</div>
+						)}
+						<Input
+							ref={fileInputRef}
+							id='image'
+							name='image'
+							type='file'
+							accept='.jpeg, .jpg, .webp, .png'
+							onChange={(e) => {
+								setData('image', e.target.files?.[0] ?? null);
+								setData('remove_image', false);
+							}}
+						/>
+						{errors.image && <p className="text-sm text-destructive">{errors.image}</p>}
 					</Field>
 
 					<Field>
@@ -105,11 +175,11 @@ export default function ProductForm({
 							</p>
 						)}
 					</Field>
-
+					
 					<TcgSetSelector
 						tcgs={tcgs}
 						sets={sets}
-							value={data.set_id}
+						value={data.set_id}
 						onChange={(setId) => setData('set_id', setId)}
 						defaultTcgId={defaultTcgId}
 						error={errors.set_id}

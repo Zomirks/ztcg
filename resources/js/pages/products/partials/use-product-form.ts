@@ -13,6 +13,7 @@ export function useProductForm(product?: Product) {
 		boosters_count: product?.boosters_count ?? 1,
 		product_type: product?.product_type ?? '',
 		set_id: product ? String(product.set.id) : '',
+		remove_image: false,
 	});
 
 	const submit = (e: React.SubmitEvent<HTMLFormElement>) => {

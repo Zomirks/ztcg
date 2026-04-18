@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Set;
 use App\Models\Tcg;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -49,7 +50,12 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $this->authorize('create', Product::class);
-        Product::create($request->validated());
+
+        $data = $request->safe()->except(['image']);
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('product-images', 'public');
+        }
+        Product::create($data);
 
         return redirect()
             ->route('products.index')
@@ -89,7 +95,19 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-        $product->update($request->validated());
+        $data = $request->safe()->except(['image']);
+
+        if ($request->hasFile('image') || $request->boolean('remove_image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+
+            $data['image_path'] = $request->file('image')
+                ? $request->file('image')->store('product-images', 'public')
+                : null;
+        }
+
+        $product->update($data);
 
         return redirect()
             ->route('products.index')

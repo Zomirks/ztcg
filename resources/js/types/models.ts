@@ -39,6 +39,7 @@ export interface ProductFormData {
 	boosters_count: number | null;
 	language: string;
 	set_id: string;
+	remove_image: boolean;
 }
 
 export interface Product {
