@@ -6,6 +6,7 @@ use App\Enums\Language;
 use App\Enums\ProductType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class UpdateProductRequest extends FormRequest
@@ -27,11 +28,14 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'base_price' => ['nullable', 'numeric', 'min:0'],
+            'image' => ['sometimes', 'nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
             'language' => ['sometimes', new Enum(Language::class)],
             'name' => ['nullable', 'string'],
             'product_type' => ['sometimes', new Enum(ProductType::class)],
-            'set_id' => ['sometimes', 'exists:sets,id'],
             'release_date' => ['nullable', 'date'],
+            'barcode' => ['sometimes', 'nullable', 'string', Rule::unique('products', 'barcode')->ignore($this->product)],
+            'boosters_count' => ['sometimes', 'nullable', 'integer', 'min:1'],
+            'set_id' => ['sometimes', 'exists:sets,id'],
         ];
     }
 
@@ -42,6 +46,10 @@ class UpdateProductRequest extends FormRequest
             'language.enum' => 'La langue sélectionnée est invalide.',
             'product_type.enum' => 'Le type de produit sélectionné est invalide.',
             'base_price.min' => 'Le prix ne peut pas être négatif.',
+            'barcode.unique' => 'Un produit existant possède déjà ce code-barres',
+            'boosters_count.min' => 'Le nombre de booster est au minimum de 1',
+            'image.max' => 'L\'image téléchargée est trop lourde',
+            'image.mimes' => 'Le type d\'image téléchargée n\'est pas supporté',
             'release_date.date' => 'La date de sortie est invalide.',
         ];
     }

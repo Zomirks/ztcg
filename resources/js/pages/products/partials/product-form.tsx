@@ -291,6 +291,39 @@ export default function ProductForm({
 							</PopoverContent>
 						</Popover>
 					</Field>
+
+					<Field>
+						<FieldLabel htmlFor='barcode'>Code-Barres</FieldLabel>
+						<Input
+							type='text'
+							id='barcode'
+							name='barcode'
+							onChange={(e) => setData('barcode', e.target.value)}
+							value={data.barcode ?? ''}
+						/>
+						{errors.barcode && (
+							<p className="text-sm text-destructive">
+								{errors.barcode}
+							</p>
+						)}
+					</Field>
+
+					<Field>
+						<FieldLabel htmlFor='boosters_count'>Nombre de Boosters</FieldLabel>
+						<Input
+							type='number'
+							id='boosters_count'
+							name='boosters_count'
+							min={1}
+							onChange={(e) => setData('boosters_count', Number(e.target.value))}
+							value={data.boosters_count ?? 1}
+						/>
+						{errors.boosters_count && (
+							<p className="text-sm text-destructive">
+								{errors.boosters_count}
+							</p>
+						)}
+					</Field>
 				</div>
 			</FieldGroup>
 
