@@ -20,6 +20,8 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
+
+import { formatDateNumericFr } from '@/lib/date';
 import { index as productsIndex, create as productsCreate, edit as productsEdit, destroy as productsDestroy } from '@/routes/products';
 import type { LanguageEnum, Product, ProductTypeEnum } from "@/types/models";
 
@@ -92,6 +94,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 										<TableHead className="w-20">Licence</TableHead>
 										<TableHead className="w-20">Set</TableHead>
 										<TableHead className="w-20">Type</TableHead>
+										<TableHead className="w-40">Image</TableHead>
 										<TableHead className="w-40">Nom</TableHead>
 										<TableHead className="w-10">Langue</TableHead>
 										<TableHead className="w-25">Prix de base</TableHead>
@@ -109,6 +112,17 @@ export default function Index({ products, languages, productTypes }: Props) {
 											<TableCell>
 												{productTypes.find(c => c.value === product.product_type)?.label}
 											</TableCell>
+											<TableCell>
+												{product.image_url ? (
+													<img
+														src={product.image_url}
+														alt={product.name ?? product.set.name+' - '+product.product_type}
+														className='h-12 w-24 rounded object-contain'
+													/>
+												) : (
+													<span className="text-muted-foreground">-</span>
+												)}
+											</TableCell>
 											<TableCell>{product.name ?? '—'}</TableCell>
 											<TableCell>
 												<Badge>
@@ -122,11 +136,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 											</TableCell>
 											<TableCell>
 												{product.release_date
-													? new Date(product.release_date + 'T00:00:00').toLocaleDateString('fr-FR', {
-														year: 'numeric',
-														month: 'numeric',
-														day: 'numeric',
-													})
+													? formatDateNumericFr(product.release_date)
 													: '—'}
 											</TableCell>
 											<TableCell className="text-right">

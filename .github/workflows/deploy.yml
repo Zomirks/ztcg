@@ -6,6 +6,10 @@ on:
       - dev
       - main
 
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -54,6 +58,7 @@ jobs:
         run: |
           rsync -azv --delete \
             --exclude='.env' \
+            --exclude='storage/app' \
             --exclude='storage/logs' \
             --exclude='storage/framework/cache' \
             --exclude='storage/framework/sessions' \
@@ -66,11 +71,8 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/sites/${{ steps.target.outputs.path }}
+            /opt/php8.5/bin/php artisan storage:link
             /opt/php8.5/bin/php artisan migrate --force
-            /opt/php8.5/bin/php artisan config:clear
-            /opt/php8.5/bin/php artisan route:clear
-            /opt/php8.5/bin/php artisan view:clear
-            /opt/php8.5/bin/php artisan config:cache
-            /opt/php8.5/bin/php artisan route:cache
-            /opt/php8.5/bin/php artisan view:cache
+            /opt/php8.5/bin/php artisan wayfinder:generate
+            /opt/php8.5/bin/php artisan optimize
           EOF

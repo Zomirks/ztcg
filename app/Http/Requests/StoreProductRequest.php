@@ -27,9 +27,12 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'base_price' => ['nullable', 'numeric', 'min:0'],
+            'image' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
             'language' => ['required', new Enum(Language::class)],
             'name' => ['nullable', 'string'],
             'product_type' => ['required', new Enum(ProductType::class)],
+            'barcode' => ['nullable', 'string', 'unique:products,barcode'],
+            'boosters_count' => ['nullable', 'integer', 'min:1'],
             'set_id' => ['required', 'exists:sets,id'],
             'release_date' => ['nullable', 'date'],
         ];
@@ -45,6 +48,10 @@ class StoreProductRequest extends FormRequest
             'product_type.required' => 'Veuillez sélectionner un type de produit.',
             'product_type.enum' => 'Le type de produit sélectionné est invalide.',
             'base_price.min' => 'Le prix ne peut pas être négatif.',
+            'barcode.unique' => 'Un produit existant possède déjà ce code-barres',
+            'boosters_count.min' => 'Le nombre de booster est au minimum de 1',
+            'image.max' => 'L\'image téléchargée est trop lourde',
+            'image.mimes' => 'Le type d\'image téléchargée n\'est pas supporté',
             'release_date.date' => 'La date de sortie est invalide.',
         ];
     }

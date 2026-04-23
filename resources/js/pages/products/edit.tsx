@@ -1,8 +1,9 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as productsIndex, update } from '@/routes/products';
-import type { ProductFormData, LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
+import { index as productsIndex } from '@/routes/products';
+import type { LanguageEnum, Product, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
+import { useProductForm } from './partials/use-product-form';
 
 interface Props {
 	sets: Set[];
@@ -13,19 +14,7 @@ interface Props {
 }
 
 export default function Edit({ product, productTypes, sets, languages, tcgs }: Props) {
-	const form = useForm<ProductFormData>({
-		name: product.name ?? '',
-		language: product.language,
-		base_price: product.base_price ?? '',
-		release_date: product.release_date ?? '',
-		product_type: product.product_type,
-		set_id: String(product.set.id),
-	});
-
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		form.put(update(product.id).url);
-	};
+	const {form, submit} = useProductForm(product);
 
 	return (
 		<>
@@ -44,13 +33,13 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 						<ProductForm
 							form={form}
 							sets={sets}
+							product={product}
 							productTypes={productTypes}
 							languages={languages}
 							tcgs={tcgs}
-							defaultTcgId={product.set.tcg.id}
 							submitLabel="Modifier"
 							submittingLabel="Modification en cours..."
-							onSubmit={handleSubmit}
+							onSubmit={submit}
 						/>
 					</CardContent>
 				</Card>
