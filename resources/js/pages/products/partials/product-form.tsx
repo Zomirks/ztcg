@@ -1,6 +1,6 @@
 import type { useForm } from '@inertiajs/react';
 import { fr } from 'date-fns/locale';
-import { CalendarIcon, XIcon } from 'lucide-react';
+import { Barcode, CalendarIcon, XIcon } from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,6 @@ interface Props {
 	product?: Product;
 	productTypes: ProductTypeEnum[];
 	tcgs: Tcg[];
-	defaultTcgId?: number;
 	sets: Set[];
 	submitLabel: string;
 	submittingLabel: string;
@@ -51,13 +50,20 @@ export default function ProductForm({
 	productTypes,
 	sets,
 	tcgs,
-	defaultTcgId,
 	submitLabel,
 	submittingLabel,
 	onSubmit,
 }: Props) {
-	const { data, setData, processing, errors } = form;
+	const { data, setData, clearErrors, processing, errors } = form;
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const handleChange = <K extends keyof ProductFormData>(
+		field: K,
+		value: ProductFormData[K],
+	) => {
+		setData(field, value as never);
+		clearErrors(field);
+	};
 
 	const previewUrl = useMemo(() => {
 		if (data.image instanceof File) {
@@ -95,6 +101,14 @@ export default function ProductForm({
 		<form onSubmit={onSubmit}>
 			<FieldGroup>
 				<div className="grid grid-cols-2 gap-4">
+					<TcgSetSelector
+						tcgs={tcgs}
+						sets={sets}
+						values={{ tcg_id: data.tcg_id, set_id: data.set_id }}
+						onChange={(field, value) => handleChange(field, value)}
+						errors={errors}
+					/>
+
 					<Field>
 						<FieldLabel htmlFor="name">Nom</FieldLabel>
 						<Input
@@ -102,7 +116,7 @@ export default function ProductForm({
 							id="name"
 							name="name"
 							onChange={(e) =>
-								setData('name', e.target.value)
+								handleChange('name', e.target.value)
 							}
 							value={data.name}
 						/>
@@ -143,8 +157,8 @@ export default function ProductForm({
 							type='file'
 							accept='.jpeg, .jpg, .webp, .png'
 							onChange={(e) => {
-								setData('image', e.target.files?.[0] ?? null);
-								setData('remove_image', false);
+								handleChange('image', e.target.files?.[0] ?? null);
+								handleChange('remove_image', false);
 							}}
 						/>
 						{errors.image && <p className="text-sm text-destructive">{errors.image}</p>}
@@ -161,7 +175,7 @@ export default function ProductForm({
 								step={0.001}
 								placeholder="0.00"
 								onChange={(e) =>
-									setData('base_price', e.target.value)
+									handleChange('base_price', e.target.value)
 								}
 								value={data.base_price}
 							/>
@@ -175,17 +189,8 @@ export default function ProductForm({
 							</p>
 						)}
 					</Field>
-					
-					<TcgSetSelector
-						tcgs={tcgs}
-						sets={sets}
-						value={data.set_id}
-						onChange={(setId) => setData('set_id', setId)}
-						defaultTcgId={defaultTcgId}
-						error={errors.set_id}
-					/>
 
-					<Field>
+					<Field data-invalid={errors.product_type ? true : undefined}>
 						<FieldLabel htmlFor="product_type">
 							Type de produit <span className="text-destructive">*</span>
 						</FieldLabel>
@@ -194,12 +199,13 @@ export default function ProductForm({
 							value={data.product_type}
 							required
 							onValueChange={(value) =>
-								setData('product_type', value)
+								handleChange('product_type', value)
 							}
 						>
 							<SelectTrigger
 								id="product_type"
 								className="w-full"
+								aria-invalid={errors.product_type ? true : undefined}
 							>
 								<SelectValue placeholder="Sélectionnez un type de produit" />
 							</SelectTrigger>
@@ -223,7 +229,7 @@ export default function ProductForm({
 						)}
 					</Field>
 
-					<Field>
+					<Field data-invalid={errors.language ? true : undefined}>
 						<FieldLabel htmlFor="language">
 							Langue  <span className="text-destructive">*</span>
 						</FieldLabel>
@@ -231,12 +237,13 @@ export default function ProductForm({
 							name="language"
 							value={data.language}
 							onValueChange={(value) =>
-								setData('language', value)
+								handleChange('language', value)
 							}
 						>
 							<SelectTrigger
 								id="language"
 								className="w-full"
+								aria-invalid={errors.language ? true : undefined}
 							>
 								<SelectValue placeholder="Sélectionnez une langue" />
 							</SelectTrigger>
@@ -285,22 +292,28 @@ export default function ProductForm({
 										data.release_date ? parseIsoDate(data.release_date) : undefined
 									}
 									onSelect={(date) => {
-										setData('release_date', toIsoDate(date));
+										handleChange('release_date', toIsoDate(date));
 									}}
 								/>
 							</PopoverContent>
 						</Popover>
 					</Field>
 
-					<Field>
+					<Field data-invalid={errors.barcode ? true : undefined}>
 						<FieldLabel htmlFor='barcode'>Code-Barres</FieldLabel>
-						<Input
-							type='text'
-							id='barcode'
-							name='barcode'
-							onChange={(e) => setData('barcode', e.target.value)}
-							value={data.barcode ?? ''}
-						/>
+						<InputGroup>
+							<InputGroupInput
+								type='text'
+								id='barcode'
+								name='barcode'
+								onChange={(e) => handleChange('barcode', e.target.value)}
+								aria-invalid={errors.barcode ? true : undefined}
+								value={data.barcode ?? ''}
+							/>
+							<InputGroupAddon>
+								<Barcode />
+							</InputGroupAddon>
+						</InputGroup>
 						{errors.barcode && (
 							<p className="text-sm text-destructive">
 								{errors.barcode}
@@ -315,7 +328,7 @@ export default function ProductForm({
 							id='boosters_count'
 							name='boosters_count'
 							min={1}
-							onChange={(e) => setData('boosters_count', Number(e.target.value))}
+							onChange={(e) => handleChange('boosters_count', Number(e.target.value))}
 							value={data.boosters_count ?? 1}
 						/>
 						{errors.boosters_count && (

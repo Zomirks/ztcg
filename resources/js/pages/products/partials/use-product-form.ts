@@ -12,17 +12,24 @@ export function useProductForm(product?: Product) {
 		barcode: product?.barcode ?? '',
 		boosters_count: product?.boosters_count ?? 1,
 		product_type: product?.product_type ?? '',
+		tcg_id: product ? String(product.set.tcg.id) : '',
 		set_id: product ? String(product.set.id) : '',
 		remove_image: false,
 	});
 
 	const submit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		
+
+		const onError = () => {
+			if (!form.data.tcg_id) {
+				form.setError('tcg_id', 'Veuillez sélectionner une licence.');
+			}
+		};
+
 		if (product) {
-			form.put(update(product.id).url, { forceFormData: true });
+			form.put(update(product.id).url, { forceFormData: true, onError });
 		} else {
-			form.post('/products');
+			form.post('/products', { onError });
 		}
 	};
 

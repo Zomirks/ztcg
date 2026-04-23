@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
 	Combobox,
 	ComboboxContent,
@@ -12,22 +10,19 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Select, SelectTrigger, SelectValue, SelectItem, SelectGroup, SelectContent } from "@/components/ui/select";
 import type { Tcg, Set } from "@/types/models";
 
+type FieldName = 'tcg_id' | 'set_id';
+
 interface Props {
 	tcgs: Tcg[];
 	sets: Set[];
-	defaultTcgId?: number;
-	value: string;
-	onChange: (setId: string) => void;
-	error?: string;
+	values: Record<FieldName, string>;
+	onChange: (field: FieldName, value: string) => void;
+	errors?: Partial<Record<FieldName, string>>;
 }
 
-export function TcgSetSelector({ tcgs, sets, defaultTcgId, value, onChange, error }: Props) {
-	const [selectedTcgId, setSelectedTcgId] = useState<string>(
-		defaultTcgId ? String(defaultTcgId) : '',
-	);
-
-	const filteredSets = selectedTcgId
-		? sets.filter((set) => set.tcg.id === Number(selectedTcgId))
+export function TcgSetSelector({ tcgs, sets, values, onChange, errors }: Props) {
+	const filteredSets = values.tcg_id
+		? sets.filter((set) => set.tcg.id === Number(values.tcg_id))
 		: [];
 
 	const setItems = filteredSets.map((set) => String(set.id));
@@ -35,16 +30,20 @@ export function TcgSetSelector({ tcgs, sets, defaultTcgId, value, onChange, erro
 
 	return (
 		<>
-			<Field>
+			<Field data-invalid={errors?.tcg_id ? true : undefined}>
 				<FieldLabel htmlFor="tcg_id">Licence  <span className="text-destructive">*</span></FieldLabel>
 				<Select
-					value={selectedTcgId}
+					value={values.tcg_id}
 					onValueChange={(newValue) => {
-						setSelectedTcgId(newValue);
-						onChange('');
+						onChange('tcg_id', newValue);
+						onChange('set_id', '');
 					}}
 				>
-					<SelectTrigger id="tcg_id" className="w-full">
+					<SelectTrigger
+						id="tcg_id"
+						className="w-full"
+						aria-invalid={errors?.tcg_id ? true : undefined}
+					>
 						<SelectValue placeholder="Sélectionnez une licence" />
 					</SelectTrigger>
 					<SelectContent>
@@ -60,19 +59,26 @@ export function TcgSetSelector({ tcgs, sets, defaultTcgId, value, onChange, erro
 						</SelectGroup>
 					</SelectContent>
 				</Select>
+				{errors?.tcg_id && (
+					<p className="text-sm text-destructive">
+						{errors.tcg_id}
+					</p>
+				)}
 			</Field>
 
-			<Field>
+			<Field data-invalid={errors?.set_id ? true : undefined}>
 				<FieldLabel htmlFor="set_id">Set  <span className="text-destructive">*</span></FieldLabel>
 				<Combobox
-					value={value}
-					onValueChange={(newValue) => onChange(newValue as string)}
-					disabled={!selectedTcgId}
+					value={values.set_id}
+					onValueChange={(newValue) => onChange('set_id', newValue as string)}
+					disabled={!values.tcg_id}
 					items={setItems}
 					itemToStringLabel={(id) => setLabelMap.get(id) ?? id}
 				>
 					<ComboboxInput
-						placeholder={!selectedTcgId ? 'Veuillez sélectionner une licence' : 'Sélectionnez un set'}
+						disabled={!values.tcg_id}
+						aria-invalid={errors?.set_id ? true : undefined}
+						placeholder={!values.tcg_id ? 'Veuillez sélectionner une licence' : 'Sélectionnez un set'}
 					/>
 					<ComboboxContent>
 						<ComboboxEmpty>Aucun set trouvé.</ComboboxEmpty>
@@ -85,9 +91,9 @@ export function TcgSetSelector({ tcgs, sets, defaultTcgId, value, onChange, erro
 						</ComboboxList>
 					</ComboboxContent>
 				</Combobox>
-				{error && (
+				{errors?.set_id && (
 					<p className="text-sm text-destructive">
-						{error}
+						{errors.set_id}
 					</p>
 				)}
 			</Field>

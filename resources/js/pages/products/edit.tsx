@@ -37,7 +37,6 @@ export default function Edit({ product, productTypes, sets, languages, tcgs }: P
 							productTypes={productTypes}
 							languages={languages}
 							tcgs={tcgs}
-							defaultTcgId={product.set.tcg.id}
 							submitLabel="Modifier"
 							submittingLabel="Modification en cours..."
 							onSubmit={submit}

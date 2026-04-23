@@ -38,6 +38,7 @@ export interface ProductFormData {
 	barcode: string | null;
 	boosters_count: number | null;
 	language: string;
+	tcg_id: string;
 	set_id: string;
 	remove_image: boolean;
 }
