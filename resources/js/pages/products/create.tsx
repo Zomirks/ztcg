@@ -1,8 +1,9 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { index as productsIndex } from '@/routes/products';
-import type { ProductFormData, LanguageEnum, ProductTypeEnum, Set, Tcg} from '@/types/models';
+import type { LanguageEnum, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
+import { useProductForm } from './partials/use-product-form';
 
 interface Props {
 	sets: Set[];
@@ -12,19 +13,7 @@ interface Props {
 }
 
 export default function Create({ productTypes, sets, languages, tcgs }: Props) {
-	const form = useForm<ProductFormData>({
-		name: '',
-		language: '',
-		base_price: '',
-		release_date: '',
-		product_type: '',
-		set_id: '',
-	});
-
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		form.post('/products');
-	};
+	const {form, submit} = useProductForm();
 
 	return (
 		<>
@@ -48,7 +37,7 @@ export default function Create({ productTypes, sets, languages, tcgs }: Props) {
 							tcgs={tcgs}
 							submitLabel="Ajouter"
 							submittingLabel="Ajout en cours..."
-							onSubmit={handleSubmit}
+							onSubmit={submit}
 						/>
 					</CardContent>
 				</Card>

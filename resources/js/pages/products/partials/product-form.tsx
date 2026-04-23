@@ -1,6 +1,7 @@
 import type { useForm } from '@inertiajs/react';
-import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { fr } from 'date-fns/locale';
+import { Barcode, CalendarIcon, XIcon } from 'lucide-react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -25,15 +26,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { formatDateFr, parseIsoDate, toIsoDate } from '@/lib/date';
 
-import type { ProductFormData, LanguageEnum, ProductTypeEnum, Set, Tcg } from '@/types/models';
+import type { Product, ProductFormData, LanguageEnum, ProductTypeEnum, Set, Tcg } from '@/types/models';
+import { TcgSetSelector } from './tcg-set-selector';
 
 interface Props {
 	form: ReturnType<typeof useForm<ProductFormData>>;
 	languages: LanguageEnum[];
+	product?: Product;
 	productTypes: ProductTypeEnum[];
 	tcgs: Tcg[];
-	defaultTcgId?: number;
 	sets: Set[];
 	submitLabel: string;
 	submittingLabel: string;
@@ -43,28 +46,69 @@ interface Props {
 export default function ProductForm({
 	form,
 	languages,
+	product,
 	productTypes,
 	sets,
 	tcgs,
-	defaultTcgId,
 	submitLabel,
 	submittingLabel,
 	onSubmit,
 }: Props) {
-	const { data, setData, processing, errors } = form;
+	const { data, setData, clearErrors, processing, errors } = form;
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
-	const [selectedTcgId, setSelectedTcgId] = useState<string>(
-		defaultTcgId ? String(defaultTcgId) : '',
-	);
+	const handleChange = <K extends keyof ProductFormData>(
+		field: K,
+		value: ProductFormData[K],
+	) => {
+		setData(field, value as never);
+		clearErrors(field);
+	};
 
-	const filteredProducts = selectedTcgId
-		? sets.filter((set) => set.tcg.id === Number(selectedTcgId))
-		: [];
+	const previewUrl = useMemo(() => {
+		if (data.image instanceof File) {
+			return URL.createObjectURL(data.image);
+		}
+
+		if (product?.image_url && !data.remove_image) {
+			return product.image_url;
+		}
+
+		return null;
+	}, [data.image, data.remove_image, product?.image_url]);
+
+	useEffect(() => {
+		if (!(data.image instanceof File) || !previewUrl) {
+			return;
+		}
+
+		return () => URL.revokeObjectURL(previewUrl);
+	}, [data.image, previewUrl]);
+
+	const handleRemoveImage = () => {
+		if (data.image instanceof File) {
+			setData('image', null);
+
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
+		} else {
+			setData('remove_image', true);
+		}
+	};
 
 	return (
 		<form onSubmit={onSubmit}>
 			<FieldGroup>
 				<div className="grid grid-cols-2 gap-4">
+					<TcgSetSelector
+						tcgs={tcgs}
+						sets={sets}
+						values={{ tcg_id: data.tcg_id, set_id: data.set_id }}
+						onChange={(field, value) => handleChange(field, value)}
+						errors={errors}
+					/>
+
 					<Field>
 						<FieldLabel htmlFor="name">Nom</FieldLabel>
 						<Input
@@ -72,7 +116,7 @@ export default function ProductForm({
 							id="name"
 							name="name"
 							onChange={(e) =>
-								setData('name', e.target.value)
+								handleChange('name', e.target.value)
 							}
 							value={data.name}
 						/>
@@ -81,6 +125,43 @@ export default function ProductForm({
 								{errors.name}
 							</p>
 						)}
+					</Field>
+
+					<Field>
+						<FieldLabel htmlFor='image'>Image</FieldLabel>
+						{previewUrl && (
+							<div className="mt-2">
+								<div className="relative w-fit">
+									<img
+										src={previewUrl}
+										alt="Aperçu"
+										className="h-32 w-32 rounded-md border object-cover"
+									/>
+									<Button
+										type="button"
+										variant="destructive"
+										size="icon"
+										className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+										onClick={handleRemoveImage}
+										aria-label="Supprimer l'image"
+									>
+										<XIcon className="h-3 w-3" />
+									</Button>
+								</div>
+							</div>
+						)}
+						<Input
+							ref={fileInputRef}
+							id='image'
+							name='image'
+							type='file'
+							accept='.jpeg, .jpg, .webp, .png'
+							onChange={(e) => {
+								handleChange('image', e.target.files?.[0] ?? null);
+								handleChange('remove_image', false);
+							}}
+						/>
+						{errors.image && <p className="text-sm text-destructive">{errors.image}</p>}
 					</Field>
 
 					<Field>
@@ -94,7 +175,7 @@ export default function ProductForm({
 								step={0.001}
 								placeholder="0.00"
 								onChange={(e) =>
-									setData('base_price', e.target.value)
+									handleChange('base_price', e.target.value)
 								}
 								value={data.base_price}
 							/>
@@ -109,83 +190,22 @@ export default function ProductForm({
 						)}
 					</Field>
 
-					<Field>
-						<FieldLabel htmlFor="tcg_id">Licence</FieldLabel>
-						<Select
-							value={selectedTcgId}
-							onValueChange={(value) => {
-								setSelectedTcgId(value);
-								setData('set_id', '');
-							}}
-						>
-							<SelectTrigger id="tcg_id" className="w-full">
-								<SelectValue placeholder="Sélectionnez une licence" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{tcgs.map((tcg) => (
-										<SelectItem
-											key={tcg.id}
-											value={String(tcg.id)}
-										>
-											{tcg.name}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-					</Field>
-
-					<Field>
-						<FieldLabel htmlFor="set_id">Set</FieldLabel>
-						<Select
-							name="set_id"
-							value={data.set_id}
-							onValueChange={(value) => setData('set_id', value)}
-							disabled={!selectedTcgId}
-						>
-							<SelectTrigger id="set_id" className="w-full">
-								<SelectValue
-									placeholder={!selectedTcgId
-										? 'Veuillez sélectionner une licence'
-										: 'Sélectionnez un set'
-									}
-								/>
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{filteredProducts.map((set) => (
-										<SelectItem
-											key={set.id}
-											value={String(set.id)}
-										>
-											{set.name}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-						{errors.set_id && (
-							<p className="text-sm text-destructive">
-								{errors.set_id}
-							</p>
-						)}
-					</Field>
-
-					<Field>
+					<Field data-invalid={errors.product_type ? true : undefined}>
 						<FieldLabel htmlFor="product_type">
-							Type de produit
+							Type de produit <span className="text-destructive">*</span>
 						</FieldLabel>
 						<Select
 							name="product_type"
 							value={data.product_type}
+							required
 							onValueChange={(value) =>
-								setData('product_type', value)
+								handleChange('product_type', value)
 							}
 						>
 							<SelectTrigger
 								id="product_type"
 								className="w-full"
+								aria-invalid={errors.product_type ? true : undefined}
 							>
 								<SelectValue placeholder="Sélectionnez un type de produit" />
 							</SelectTrigger>
@@ -209,20 +229,21 @@ export default function ProductForm({
 						)}
 					</Field>
 
-					<Field>
+					<Field data-invalid={errors.language ? true : undefined}>
 						<FieldLabel htmlFor="language">
-							Langue
+							Langue  <span className="text-destructive">*</span>
 						</FieldLabel>
 						<Select
 							name="language"
 							value={data.language}
 							onValueChange={(value) =>
-								setData('language', value)
+								handleChange('language', value)
 							}
 						>
 							<SelectTrigger
 								id="language"
 								className="w-full"
+								aria-invalid={errors.language ? true : undefined}
 							>
 								<SelectValue placeholder="Sélectionnez une langue" />
 							</SelectTrigger>
@@ -246,7 +267,7 @@ export default function ProductForm({
 						)}
 					</Field>
 
-					<Field className="flex flex-col gap-y-2">
+					<Field>
 						<FieldLabel htmlFor="release_date">Date de sortie</FieldLabel>
 						<Popover>
 							<PopoverTrigger asChild>
@@ -257,30 +278,64 @@ export default function ProductForm({
 								>
 									<CalendarIcon />
 									<span className={!data.release_date ? 'text-muted-foreground' : ''}>
-										{data.release_date ? new Date(data.release_date + 'T00:00:00').toLocaleDateString('fr-FR', {
-											year: 'numeric',
-											month: 'long',
-											day: 'numeric',
-										}) : 'Sélectionnez une date'}
+										{data.release_date ? formatDateFr(data.release_date) : 'Sélectionnez une date'}
 									</span>
 								</Button>
 							</PopoverTrigger>
-							<PopoverContent className="w-auto p-0 bg-surface border-border">
+							<PopoverContent className="p-0">
 								<Calendar
 									mode="single"
 									required
+									locale={fr}
+									captionLayout="dropdown"
 									selected={
-										data.release_date ? new Date(data.release_date + 'T00:00:00') : undefined
+										data.release_date ? parseIsoDate(data.release_date) : undefined
 									}
 									onSelect={(date) => {
-										const year = date.getFullYear();
-										const month = String(date.getMonth() + 1).padStart(2, '0');
-										const day = String(date.getDate()).padStart(2, '0');
-										setData('release_date', `${year}-${month}-${day}`);
+										handleChange('release_date', toIsoDate(date));
 									}}
 								/>
 							</PopoverContent>
 						</Popover>
+					</Field>
+
+					<Field data-invalid={errors.barcode ? true : undefined}>
+						<FieldLabel htmlFor='barcode'>Code-Barres</FieldLabel>
+						<InputGroup>
+							<InputGroupInput
+								type='text'
+								id='barcode'
+								name='barcode'
+								onChange={(e) => handleChange('barcode', e.target.value)}
+								aria-invalid={errors.barcode ? true : undefined}
+								value={data.barcode ?? ''}
+							/>
+							<InputGroupAddon>
+								<Barcode />
+							</InputGroupAddon>
+						</InputGroup>
+						{errors.barcode && (
+							<p className="text-sm text-destructive">
+								{errors.barcode}
+							</p>
+						)}
+					</Field>
+
+					<Field>
+						<FieldLabel htmlFor='boosters_count'>Nombre de Boosters</FieldLabel>
+						<Input
+							type='number'
+							id='boosters_count'
+							name='boosters_count'
+							min={1}
+							onChange={(e) => handleChange('boosters_count', Number(e.target.value))}
+							value={data.boosters_count ?? 1}
+						/>
+						{errors.boosters_count && (
+							<p className="text-sm text-destructive">
+								{errors.boosters_count}
+							</p>
+						)}
 					</Field>
 				</div>
 			</FieldGroup>

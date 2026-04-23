@@ -58,6 +58,7 @@ jobs:
         run: |
           rsync -azv --delete \
             --exclude='.env' \
+            --exclude='storage/app' \
             --exclude='storage/logs' \
             --exclude='storage/framework/cache' \
             --exclude='storage/framework/sessions' \
@@ -70,6 +71,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/sites/${{ steps.target.outputs.path }}
+            /opt/php8.5/bin/php artisan storage:link
             /opt/php8.5/bin/php artisan migrate --force
             /opt/php8.5/bin/php artisan wayfinder:generate
             /opt/php8.5/bin/php artisan optimize

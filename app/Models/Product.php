@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -15,12 +16,22 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'release_date',
-        'base_price',
         'product_type',
+        'image_path',
+        'base_price',
         'language',
+        'barcode',
+        'release_date',
+        'boosters_count',
         'set_id',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_path ? Storage::disk('public')->url($this->image_path) : null;
+    }
 
     protected function casts(): array
     {
