@@ -1,12 +1,10 @@
 import { Link } from '@inertiajs/react';
 import {
-	BadgeCheck,
-	Barcode,
-	BookOpen,
-	Component,
-    FolderGit2,
-    LayoutGrid,
-    Package,
+	BadgeCheckIcon,
+	BarcodeIcon,
+	ComponentIcon,
+	LayoutGridIcon,
+	PackageIcon,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -32,27 +30,27 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
-        icon: LayoutGrid,
+		icon: LayoutGridIcon,
 	},
 	{
 		title: 'Produits',
 		href: productsIndex(),
-		icon: Barcode,
+		icon: BarcodeIcon,
 	},
 	{
 		title: 'Sets',
 		href: setsIndex(),
-		icon: Component,
+		icon: ComponentIcon,
 	},
     {
         title: 'TCG',
         href: tcgsIndex(),
-        icon: BadgeCheck,
+		icon: BadgeCheckIcon,
     },
     {
         title: 'Ma Collection',
         href: collectionItemsIndex(),
-        icon: Package,
+		icon: PackageIcon,
     },
 ];
 

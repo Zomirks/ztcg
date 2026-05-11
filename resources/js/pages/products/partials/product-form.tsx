@@ -1,6 +1,6 @@
 import type { useForm } from '@inertiajs/react';
 import { fr } from 'date-fns/locale';
-import { Barcode, CalendarIcon, XIcon } from 'lucide-react';
+import { BarcodeIcon, CalendarIcon, XIcon } from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -311,7 +311,7 @@ export default function ProductForm({
 								value={data.barcode ?? ''}
 							/>
 							<InputGroupAddon>
-								<Barcode />
+								<BarcodeIcon />
 							</InputGroupAddon>
 						</InputGroup>
 						{errors.barcode && (

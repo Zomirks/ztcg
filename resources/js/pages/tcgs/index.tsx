@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { CheckCircle2, CirclePlus, MoreHorizontalIcon, PackageOpen, X } from 'lucide-react';
+import { CheckCircle2Icon, CirclePlusIcon, MoreHorizontalIcon, PackageOpenIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -45,11 +45,11 @@ export default function Index({ tcgs }: Props) {
 				{showFlash && flash?.success && (
 					<div className="mt-4 flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
 						<div className="flex items-center gap-2">
-							<CheckCircle2 className="size-4" />
+							<CheckCircle2Icon className="size-4" />
 							{flash.success}
 						</div>
 						<button onClick={() => setDismissedMessage(flash.success ?? null)}>
-							<X className="size-4" />
+							<XIcon className="size-4" />
 						</button>
 					</div>
 				)}
@@ -65,7 +65,7 @@ export default function Index({ tcgs }: Props) {
                         </div>
                         <Button asChild>
                             <Link href={tcgCreate()}>
-                                <CirclePlus />
+                                <CirclePlusIcon />
                                 Ajouter une licence
                             </Link>
                         </Button>
@@ -73,7 +73,7 @@ export default function Index({ tcgs }: Props) {
                     <CardContent>
                         {tcgs.length === 0 ? (
                             <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-                                <PackageOpen className="size-12 text-muted-foreground" />
+                                <PackageOpenIcon className="size-12 text-muted-foreground" />
                                 <div className="flex flex-col gap-1">
                                     <p className="font-medium">
                                         Aucune licence
@@ -85,7 +85,7 @@ export default function Index({ tcgs }: Props) {
                                 </div>
                                 <Button asChild variant="outline">
                                     <Link href={tcgCreate()}>
-                                        <CirclePlus />
+                                        <CirclePlusIcon />
                                         Ajouter une licence
                                     </Link>
                                 </Button>
