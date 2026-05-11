@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as collectionItemsIndex, update } from '@/routes/collection-items';
+import collectionItems from '@/routes/collection-items';
 import type { CollectionItem, CollectionItemFormData, Product, Tcg } from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
 
@@ -22,7 +22,7 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        form.put(update(collection_item.id).url);
+        form.put(collectionItems.update(collection_item.id).url);
     };
 
     return (
@@ -57,7 +57,7 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
 
 Edit.layout = {
 	breadcrumbs: [
-		{ title: 'Ma collection', href: collectionItemsIndex() },
+		{ title: 'Ma collection', href: collectionItems.index() },
 		{ title: 'Modifier', href: '' },
 	]
 }

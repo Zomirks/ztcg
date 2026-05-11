@@ -24,14 +24,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { index as tcgIndex, create as tcgCreate, edit as tcgEdit, destroy as tcgDestroy } from '@/routes/tcgs';
+import tcgs from '@/routes/tcgs';
 import type { Tcg } from '@/types/models';
 
 interface Props {
     tcgs: Tcg[];
 }
 
-export default function Index({ tcgs }: Props) {
+export default function Index({ tcgs: tcgList }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
 	const { flash } = usePage().props;
@@ -64,14 +64,14 @@ export default function Index({ tcgs }: Props) {
                             </CardDescription>
                         </div>
                         <Button asChild>
-                            <Link href={tcgCreate()}>
+                            <Link href={tcgs.create()}>
                                 <CirclePlusIcon />
                                 Ajouter une licence
                             </Link>
                         </Button>
                     </CardHeader>
                     <CardContent>
-                        {tcgs.length === 0 ? (
+                        {tcgList.length === 0 ? (
                             <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
                                 <PackageOpenIcon className="size-12 text-muted-foreground" />
                                 <div className="flex flex-col gap-1">
@@ -84,7 +84,7 @@ export default function Index({ tcgs }: Props) {
                                     </p>
                                 </div>
                                 <Button asChild variant="outline">
-                                    <Link href={tcgCreate()}>
+                                    <Link href={tcgs.create()}>
                                         <CirclePlusIcon />
                                         Ajouter une licence
                                     </Link>
@@ -103,7 +103,7 @@ export default function Index({ tcgs }: Props) {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {tcgs.map((tcg) => (
+                                    {tcgList.map((tcg) => (
 										<TableRow key={tcg.id}>
 											<TableCell>
 												{tcg.logo_path ? (
@@ -142,7 +142,7 @@ export default function Index({ tcgs }: Props) {
                                                         <DropdownMenuItem
                                                             onClick={() =>
                                                                 router.visit(
-                                                                    tcgEdit.url(tcg),
+                                                                    tcgs.edit.url(tcg),
                                                                 )
                                                             }
                                                         >
@@ -153,7 +153,7 @@ export default function Index({ tcgs }: Props) {
                                                             variant="destructive"
                                                             onClick={() =>
                                                                 router.delete(
-                                                                    tcgDestroy.url(tcg),
+                                                                    tcgs.destroy.url(tcg),
                                                                 )
                                                             }
                                                         >
@@ -176,6 +176,6 @@ export default function Index({ tcgs }: Props) {
 
 Index.layout = {
 	breadcrumbs: [
-		{ title: 'TCG', href: tcgIndex() }
+		{ title: 'TCG', href: tcgs.index() }
 	]
 }

@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/table';
 
 import { formatDateNumericFr } from '@/lib/date';
-import { index as productsIndex, create as productsCreate, edit as productsEdit, destroy as productsDestroy } from '@/routes/products';
+import products from '@/routes/products';
 import type { LanguageEnum, Product, ProductTypeEnum } from "@/types/models";
 
 interface Props {
@@ -30,7 +30,7 @@ interface Props {
 	languages: LanguageEnum[];
 	productTypes: ProductTypeEnum[];
 }
-export default function Index({ products, languages, productTypes }: Props) {
+export default function Index({ products: productList, languages, productTypes }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
 	const { flash } = usePage().props;
@@ -62,14 +62,14 @@ export default function Index({ products, languages, productTypes }: Props) {
 							</CardDescription>
 						</div>
 						<Button asChild>
-							<Link href={productsCreate()}>
+							<Link href={products.create()}>
 								<CirclePlusIcon />
 								Ajouter un produit
 							</Link>
 						</Button>
 					</CardHeader>
 					<CardContent>
-						{products.length === 0 ? (
+						{productList.length === 0 ? (
 							<div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
 								<PackageOpenIcon className="size-12 text-muted-foreground" />
 								<div className="flex flex-col gap-1">
@@ -81,7 +81,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 									</p>
 								</div>
 								<Button asChild variant="outline">
-									<Link href={productsCreate()}>
+									<Link href={products.create()}>
 										<CirclePlusIcon />
 										Ajouter un produit
 									</Link>
@@ -105,7 +105,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{products.map((product) => (
+									{productList.map((product) => (
 										<TableRow key={product.id}>
 											<TableCell>{product.set.tcg.name}</TableCell>
 											<TableCell>{product.set.name}</TableCell>
@@ -159,7 +159,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 														<DropdownMenuItem
 															onClick={() =>
 																router.visit(
-																	productsEdit.url(product),
+																	products.edit.url(product),
 																)
 															}
 														>
@@ -171,7 +171,7 @@ export default function Index({ products, languages, productTypes }: Props) {
 															onClick={() => {
 																if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
 																	router.delete(
-																		productsDestroy.url(product),
+																		products.destroy.url(product),
 																	)
 																}
 															}}
@@ -195,6 +195,6 @@ export default function Index({ products, languages, productTypes }: Props) {
 
 Index.layout = {
 	breadcrumbs: [
-		{ title: 'Produits', href: productsIndex() },
+		{ title: 'Produits', href: products.index() },
 	]
 }

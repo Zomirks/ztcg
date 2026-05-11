@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { index as tcgIndex, update } from '@/routes/tcgs';
+import tcgs from '@/routes/tcgs';
 import type { Tcg, TcgFormData } from '@/types/models';
 import TcgForm from './partials/tcg-form';
 
@@ -22,7 +22,7 @@ export default function Edit({ tcg }: Props) {
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		form.put(update(tcg.id).url, {
+		form.put(tcgs.update(tcg.id).url, {
 			forceFormData: true,
 		});
 	};
@@ -55,7 +55,7 @@ export default function Edit({ tcg }: Props) {
 
 Edit.layout = {
 	breadcrumbs: [
-		{ title: 'TCG', href: tcgIndex() },
+		{ title: 'TCG', href: tcgs.index() },
 		{ title: 'Modifier une licence TCG', href: '' }
 	]
 }

@@ -24,14 +24,14 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import { index as setIndex, create as setCreate, edit as setEdit, destroy as setDestroy } from '@/routes/sets';
+import sets from '@/routes/sets';
 import type { Set } from '@/types/models';
 
 interface Props {
 	sets: Set[];
 }
 
-export default function Index({ sets }: Props) {
+export default function Index({ sets: setList }: Props) {
 	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
 
 	const { flash } = usePage().props;
@@ -64,14 +64,14 @@ export default function Index({ sets }: Props) {
 							</CardDescription>
 						</div>
 						<Button asChild>
-							<Link href={setCreate()}>
+							<Link href={sets.create()}>
 								<CirclePlusIcon />
 								Ajouter un set
 							</Link>
 						</Button>
 					</CardHeader>
 					<CardContent>
-						{sets.length === 0 ? (
+						{setList.length === 0 ? (
 							<div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
 								<PackageOpenIcon className="size-12 text-muted-foreground" />
 								<div className="flex flex-col gap-1">
@@ -84,7 +84,7 @@ export default function Index({ sets }: Props) {
 									</p>
 								</div>
 								<Button asChild variant="outline">
-									<Link href={setCreate()}>
+									<Link href={sets.create()}>
 										<CirclePlusIcon />
 										Ajouter un set
 									</Link>
@@ -109,7 +109,7 @@ export default function Index({ sets }: Props) {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{sets.map((set) => (
+									{setList.map((set) => (
 										<TableRow key={set.id}>
 											<TableCell>{set.tcg.name}</TableCell>
 											<TableCell>
@@ -158,7 +158,7 @@ export default function Index({ sets }: Props) {
 														<DropdownMenuItem
 															onClick={() =>
 																router.visit(
-																	setEdit.url(set),
+																	sets.edit.url(set),
 																)
 															}
 														>
@@ -170,7 +170,7 @@ export default function Index({ sets }: Props) {
 															onClick={() => {
 																if (confirm('Êtes-vous sûr de vouloir supprimer ce set ?')) {
 																	router.delete(
-																		setDestroy.url(set),
+																		sets.destroy.url(set),
 																	)
 																}
 															}}
@@ -194,6 +194,6 @@ export default function Index({ sets }: Props) {
 
 Index.layout = {
 	breadcrumbs: [
-		{ title: 'Sets', href: setIndex() }
+		{ title: 'Sets', href: sets.index() }
 	]
 }

@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as productsIndex } from '@/routes/products';
+import products from '@/routes/products';
 import type { LanguageEnum, ProductTypeEnum, Set, Tcg} from '@/types/models';
 import ProductForm from './partials/product-form';
 import { useProductForm } from './partials/use-product-form';
@@ -48,7 +48,7 @@ export default function Create({ productTypes, sets, languages, tcgs }: Props) {
 
 Create.layout = {
 	breadcrumbs: [
-		{ title: 'Produits', href: productsIndex() },
+		{ title: 'Produits', href: products.index() },
 		{ title: 'Ajouter', href: '' },
 	]
 }

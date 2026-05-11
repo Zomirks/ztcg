@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { index as tcgIndex, create as tcgCreate } from '@/routes/tcgs';
+import tcgs from '@/routes/tcgs';
 import type { TcgFormData } from '@/types/models';
 import TcgForm from './partials/tcg-form';
 
@@ -50,7 +50,7 @@ export default function Create() {
 
 Create.layout = {
 	breadcrumbs: [
-		{ title: 'TCG', href: tcgIndex() },
-		{ title: 'Ajouter une licence TCG', href: tcgCreate() }
+		{ title: 'TCG', href: tcgs.index() },
+		{ title: 'Ajouter une licence TCG', href: tcgs.create() }
 	]
 }

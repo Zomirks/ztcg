@@ -7,7 +7,7 @@ import {
 	PackageIcon,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
+// import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -20,10 +20,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import { index as collectionItemsIndex } from '@/routes/collection-items';
-import { index as productsIndex } from '@/routes/products';
-import { index as setsIndex } from '@/routes/sets';
-import { index as tcgsIndex } from '@/routes/tcgs';
+import collectionItems from '@/routes/collection-items';
+import products from '@/routes/products';
+import sets from '@/routes/sets';
+import tcgs from '@/routes/tcgs';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -34,38 +34,38 @@ const mainNavItems: NavItem[] = [
 	},
 	{
 		title: 'Produits',
-		href: productsIndex(),
+		href: products.index(),
 		icon: BarcodeIcon,
 	},
 	{
 		title: 'Sets',
-		href: setsIndex(),
+		href: sets.index(),
 		icon: ComponentIcon,
 	},
     {
         title: 'TCG',
-        href: tcgsIndex(),
+        href: tcgs.index(),
 		icon: BadgeCheckIcon,
     },
     {
         title: 'Ma Collection',
-        href: collectionItemsIndex(),
+        href: collectionItems.index(),
 		icon: PackageIcon,
     },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Repository',
+//         href: 'https://github.com/laravel/react-starter-kit',
+//         icon: FolderGit2,
+//     },
+//     {
+//         title: 'Documentation',
+//         href: 'https://laravel.com/docs/starter-kits#react',
+//         icon: BookOpen,
+//     },
+// ];
 
 export function AppSidebar() {
     return (
@@ -87,7 +87,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

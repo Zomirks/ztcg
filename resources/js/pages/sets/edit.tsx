@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { index as setIndex, update } from '@/routes/sets';
+import sets from '@/routes/sets';
 import type { Set, SetFormData, Tcg } from '@/types/models';
 import SetForm from './partials/set-form';
 
@@ -29,7 +29,7 @@ export default function Edit({ set, tcgs }: Props) {
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		form.put(update(set.id).url, {
+		form.put(sets.update(set.id).url, {
 			forceFormData: true,
 		});
 	};
@@ -69,7 +69,7 @@ export default function Edit({ set, tcgs }: Props) {
 
 Edit.layout = {
 	breadcrumbs: [
-		{ title: 'Set', href: setIndex() },
+		{ title: 'Set', href: sets.index() },
 		{ title: 'Modifier un set', href: '' }
 	]
 }

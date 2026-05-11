@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as setsIndex } from '@/routes/sets';
+import sets from '@/routes/sets';
 import type { SetFormData, Tcg } from '@/types/models';
 import SetForm from './partials/set-form';
 
@@ -58,7 +58,7 @@ export default function Create({ tcgs }: Props) {
 
 Create.layout = {
 	breadcrumbs: [
-		{ title: 'Sets', href: setsIndex() },
+		{ title: 'Sets', href: sets.index() },
 		{ title: 'Ajouter', href: '' },
 	]
 }

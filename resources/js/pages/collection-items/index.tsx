@@ -20,12 +20,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import {
-    index as collectionItemsIndex,
-    create as collectionItemsCreate,
-	edit as collectionItemsEdit,
-	destroy as collectionItemsDestroy,
-} from '@/routes/collection-items';
+import collectionItems from '@/routes/collection-items';
 import type { CollectionItem } from '@/types/models';
 
 interface Props {
@@ -64,7 +59,7 @@ export default function Index({ items }: Props) {
 							</CardDescription>
 						</div>
 						<Button asChild>
-							<Link href={collectionItemsCreate()}>
+							<Link href={collectionItems.create()}>
 								<CirclePlusIcon />
 								Ajouter un produit
 							</Link>
@@ -83,7 +78,7 @@ export default function Index({ items }: Props) {
 									</p>
 								</div>
 								<Button asChild variant="outline">
-									<Link href={collectionItemsCreate()}>
+									<Link href={collectionItems.create()}>
 										<CirclePlusIcon />
 										Ajouter un produit
 									</Link>
@@ -163,7 +158,7 @@ export default function Index({ items }: Props) {
 														<DropdownMenuItem
 															onClick={() =>
 																router.visit(
-																	collectionItemsEdit.url(item),
+																	collectionItems.edit.url(item),
 																)
 															}
 														>
@@ -175,7 +170,7 @@ export default function Index({ items }: Props) {
 															onClick={() => {
 																if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
 																	router.delete(
-																		collectionItemsDestroy.url(item),
+																		collectionItems.destroy.url(item),
 																	)
 																}
 															}}
@@ -199,6 +194,6 @@ export default function Index({ items }: Props) {
 
 Index.layout = {
 	breadcrumbs: [
-		{ title: 'Ma collection', href: collectionItemsIndex() },
+		{ title: 'Ma collection', href: collectionItems.index() },
 	]
 }
