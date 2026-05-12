@@ -26,4 +26,12 @@ enum ProductType: string
             self::Other => 'Autre',
         };
     }
+
+    public static function getOptions(): array
+    {
+        return array_map(fn (self $productType) => [
+            'label' => $productType->label(),
+            'value' => $productType->value,
+        ], self::cases());
+    }
 }

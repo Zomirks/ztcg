@@ -117,14 +117,8 @@ class ProductController extends Controller
     private function enumProps(): array
     {
         return [
-            'productTypes' => collect(ProductType::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
-            'languages' => collect(Language::cases())->map(fn ($case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-            ]),
+            'productTypes' => ProductType::getOptions(),
+            'languages' => Language::getOptions(),
         ];
     }
 

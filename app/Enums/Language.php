@@ -16,4 +16,12 @@ enum Language: string
             self::Japanese => 'Japonais',
         };
     }
+
+    public static function getOptions(): array
+    {
+        return array_map(fn (self $language) => [
+            'label' => $language->label(),
+            'value' => $language->value,
+        ], self::cases());
+    }
 }
