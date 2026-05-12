@@ -7,7 +7,6 @@ use App\Enums\ProductType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -29,9 +28,9 @@ class UpdateProductRequest extends FormRequest
         return [
             'base_price' => ['nullable', 'numeric', 'min:0'],
             'image' => ['sometimes', 'nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
-            'language' => ['sometimes', new Enum(Language::class)],
+            'language' => ['sometimes', Rule::enum(Language::class)],
             'name' => ['nullable', 'string'],
-            'product_type' => ['sometimes', new Enum(ProductType::class)],
+            'product_type' => ['sometimes', Rule::enum(ProductType::class)],
             'release_date' => ['nullable', 'date'],
             'barcode' => ['sometimes', 'nullable', 'string', Rule::unique('products', 'barcode')->ignore($this->product)],
             'boosters_count' => ['sometimes', 'nullable', 'integer', 'min:1'],

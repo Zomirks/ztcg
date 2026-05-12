@@ -6,7 +6,6 @@ use App\Enums\Language;
 use App\Enums\ProductType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class StoreProductRequest extends FormRequest
 {
@@ -28,9 +27,9 @@ class StoreProductRequest extends FormRequest
         return [
             'base_price' => ['nullable', 'numeric', 'min:0'],
             'image' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
-            'language' => ['required', new Enum(Language::class)],
+            'language' => ['required', Rule::enum(Language::class)],
             'name' => ['nullable', 'string'],
-            'product_type' => ['required', new Enum(ProductType::class)],
+            'product_type' => ['required', Rule::enum(ProductType::class)],
             'barcode' => ['nullable', 'string', 'unique:products,barcode'],
             'boosters_count' => ['nullable', 'integer', 'min:1'],
             'set_id' => ['required', 'exists:sets,id'],

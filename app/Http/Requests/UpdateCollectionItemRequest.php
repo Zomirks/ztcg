@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Enums\ProductCondition;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class UpdateCollectionItemRequest extends FormRequest
 {
@@ -28,7 +27,7 @@ class UpdateCollectionItemRequest extends FormRequest
             'product_id' => ['sometimes', 'exists:products,id'],
             'quantity' => ['sometimes', 'integer', 'min:1'],
             'purchase_price' => ['sometimes', 'numeric', 'min:0'],
-            'product_condition' => ['sometimes', new Enum(ProductCondition::class)],
+            'product_condition' => ['sometimes', Rule::enum(ProductCondition::class)],
             'purchase_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],
         ];

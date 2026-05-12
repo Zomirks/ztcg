@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\ProductCondition;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
 class StoreCollectionItemRequest extends FormRequest
 {
@@ -28,7 +28,7 @@ class StoreCollectionItemRequest extends FormRequest
             'product_id' => ['required', 'exists:products,id'],
             'quantity' => ['required', 'integer', 'min:1'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
-            'product_condition' => ['required', new Enum(ProductCondition::class)],
+            'product_condition' => ['required', Rule::enum(ProductCondition::class)],
             'purchase_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],
         ];
